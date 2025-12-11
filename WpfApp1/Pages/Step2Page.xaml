@@ -1,0 +1,129 @@
+﻿<Page x:Class="WpfApp1.Pages.Step2Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Step2Page">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        
+        <TextBlock Grid.Row="0" 
+                   Text="ШАГ 2: ВЫБОР ЦВЕТА И ДОПОЛНИТЕЛЬНЫХ ОПЦИЙ" 
+                   FontSize="18" 
+                   FontWeight="Bold"
+                   Margin="20,20,20,10"/>
+
+        
+        <Grid Grid.Row="1" Margin="40,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <StackPanel Grid.Column="0" Margin="20,0">
+                <TextBlock Text="Выберите цвет кузова:" 
+                           FontWeight="Bold" 
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Name="colorPanel">
+                    <RadioButton Content="Белый (+0 ₽)" 
+                               GroupName="Color"
+                               Tag="Белый"
+                               Checked="ColorRadioButton_Checked"/>
+                    <RadioButton Content="Чёрный (+15 000 ₽)" 
+                               GroupName="Color"
+                               Tag="Чёрный"
+                               Checked="ColorRadioButton_Checked"/>
+                    <RadioButton Content="Серый (+10 000 ₽)" 
+                               GroupName="Color"
+                               Tag="Серый"
+                               Checked="ColorRadioButton_Checked"/>
+                    <RadioButton Content="Синий (+20 000 ₽)" 
+                               GroupName="Color"
+                               Tag="Синий"
+                               Checked="ColorRadioButton_Checked"/>
+                    <RadioButton Content="Красный (+25 000 ₽)" 
+                               GroupName="Color"
+                               Tag="Красный"
+                               Checked="ColorRadioButton_Checked"/>
+                </StackPanel>
+            </StackPanel>
+
+            
+            <StackPanel Grid.Column="1" Margin="20,0">
+                <TextBlock Text="Выберите дополнительные опции:" 
+                           FontWeight="Bold" 
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Name="optionsPanel">
+                    <CheckBox Content="Кожаный салон (+80 000 ₽)" 
+                            Tag="Кожаный салон"
+                            Checked="OptionCheckBox_Changed"
+                            Unchecked="OptionCheckBox_Changed"/>
+                    <CheckBox Content="Панорамная крыша (+120 000 ₽)" 
+                            Tag="Панорамная крыша"
+                            Checked="OptionCheckBox_Changed"
+                            Unchecked="OptionCheckBox_Changed"/>
+                    <CheckBox Content="Подогрев сидений (+30 000 ₽)" 
+                            Tag="Подогрев сидений"
+                            Checked="OptionCheckBox_Changed"
+                            Unchecked="OptionCheckBox_Changed"/>
+                    <CheckBox Content="Круиз-контроль (+40 000 ₽)" 
+                            Tag="Круиз-контроль"
+                            Checked="OptionCheckBox_Changed"
+Unchecked="OptionCheckBox_Changed"/>
+                    <CheckBox Content="Климат-контроль (+50 000 ₽)" 
+                            Tag="Климат-контроль"
+                            Checked="OptionCheckBox_Changed"
+                            Unchecked="OptionCheckBox_Changed"/>
+                    <CheckBox Content="Парктроники (+35 000 ₽)" 
+                            Tag="Парктроники"
+                            Checked="OptionCheckBox_Changed"
+                            Unchecked="OptionCheckBox_Changed"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        
+        <Border Grid.Row="2" Background="#F8F9FA" Padding="20" Margin="20,20,20,30">
+            <StackPanel>
+                <TextBlock Text="ТЕКУЩАЯ СТОИМОСТЬ:" 
+                           FontWeight="Bold"/>
+                <TextBlock x:Name="totalPriceText" 
+                           Text="0 ₽" 
+                           FontSize="24" 
+                           FontWeight="Bold"
+                           Foreground="#2C3E50"/>
+                <StackPanel x:Name="priceDetailsPanel" 
+                          Orientation="Horizontal" 
+                          HorizontalAlignment="Center">
+                    <TextBlock x:Name="basePriceText" 
+                               Text="База: 0 ₽" 
+                               Margin="10,0" Foreground="#7F8C8D"/>
+                    <TextBlock Text="+" Foreground="#7F8C8D"/>
+                    <TextBlock x:Name="enginePriceText" 
+                               Text="Двигатель: 0 ₽" 
+                               Margin="10,0" Foreground="#7F8C8D"/>
+                    <TextBlock Text="+" Foreground="#7F8C8D"/>
+                    <TextBlock x:Name="colorPriceText" 
+                               Text="Цвет: 0 ₽" 
+                               Margin="10,0" Foreground="#7F8C8D"/>
+                    <TextBlock Text="+" Foreground="#7F8C8D"/>
+                    <TextBlock x:Name="optionsPriceText" 
+                               Text="Опции: 0 ₽" 
+                               Margin="10,0" Foreground="#7F8C8D"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

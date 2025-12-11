@@ -1,0 +1,104 @@
+﻿<Page x:Class="WpfApp1.Pages.Step1Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Step1Page">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        
+        <TextBlock Grid.Row="0" 
+                   Text="ШАГ 1: ВЫБОР МОДЕЛИ И ДВИГАТЕЛЯ" 
+                   FontSize="18" 
+                   FontWeight="Bold"
+                   Margin="20,20,20,10"/>
+
+        <!-- Контент -->
+        <Grid Grid.Row="1" Margin="40,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <StackPanel Grid.Column="0" Margin="20,0">
+                <TextBlock Text="Выберите модель автомобиля:" 
+                           FontWeight="Bold" 
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Name="modelPanel">
+                    <RadioButton Content="Седан (1 200 000 ₽)" 
+                               GroupName="Model"
+                               Tag="Седан"
+                               Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Хэтчбэк (1 100 000 ₽)" 
+                               GroupName="Model"
+                               Tag="Хэтчбэк"
+                               Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Кроссовер (1 500 000 ₽)" 
+                               GroupName="Model"
+                               Tag="Кроссовер"
+                               Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Внедорожник (2 000 000 ₽)" 
+                               GroupName="Model"
+                               Tag="Внедорожник"
+                               Checked="RadioButton_Checked"/>
+                </StackPanel>
+            </StackPanel>
+
+            
+            <StackPanel Grid.Column="1" Margin="20,0">
+                <TextBlock Text="Выберите тип двигателя:" 
+                           FontWeight="Bold" 
+                           Margin="0,0,0,10"/>
+
+                <StackPanel Name="enginePanel">
+                    <RadioButton Content="Бензин 1.6 (+0 ₽)" 
+                               GroupName="Engine"
+                               Tag="Бензин 1.6"
+                               Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Бензин 2.0 (+150 000 ₽)" 
+                               GroupName="Engine"
+                               Tag="Бензин 2.0"
+                               Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Дизель 2.0 (+200 000 ₽)" 
+                               GroupName="Engine"
+                               Tag="Дизель 2.0"
+                               Checked="RadioButton_Checked"/>
+                    <RadioButton Content="Гибрид (+300 000 ₽)" 
+                               GroupName="Engine"
+                               Tag="Гибрид"
+                               Checked="RadioButton_Checked"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        
+        <Border Grid.Row="2" Background="#F8F9FA" Padding="20" Margin="20,20,20,30">
+            <StackPanel>
+                <TextBlock Text="ПРЕДВАРИТЕЛЬНАЯ СТОИМОСТЬ:" 
+                           FontWeight="Bold"/>
+                <TextBlock x:Name="totalPriceText" 
+                           Text="0 ₽" 
+                           FontSize="24" 
+                           FontWeight="Bold"
+                           Foreground="#2C3E50"/>
+                <TextBlock x:Name="basePriceText" 
+                           Text="Базовая цена: 0 ₽" 
+                           Foreground="#7F8C8D"/>
+                <TextBlock x:Name="enginePriceText" 
+                           Text="Двигатель: +0 ₽" 
+                           Foreground="#7F8C8D"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

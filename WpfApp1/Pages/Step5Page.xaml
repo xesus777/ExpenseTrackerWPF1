@@ -1,0 +1,125 @@
+﻿<Page x:Class="WpfApp1.Pages.Step5Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Step5Page">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        
+        <TextBlock Grid.Row="0" 
+                   Text="ШАГ 5: ОФОРМЛЕНИЕ ЗАЯВКИ" 
+                   FontSize="18" 
+                   FontWeight="Bold"
+                   Margin="20,20,20,10"/>
+
+        
+        <Grid Grid.Row="1" Margin="40,10,40,30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="20,0">
+                <TextBlock Text="ВАШИ КОНТАКТНЫЕ ДАННЫЕ:" 
+                           FontWeight="Bold" 
+                           FontSize="16"
+                           Margin="0,0,0,20"/>
+
+                <StackPanel>
+                    <TextBlock Text="Имя и фамилия:*" 
+                               FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtName" 
+                           MaxLength="50"
+                           TextChanged="TextBox_TextChanged"/>
+
+                    <TextBlock Text="Телефон:*" 
+                               FontWeight="SemiBold" 
+                               Margin="0,15,0,0"/>
+                    <TextBox x:Name="txtPhone" 
+                           MaxLength="15"
+                           TextChanged="TextBox_TextChanged"/>
+
+                    <TextBlock Text="Email:*" 
+                               FontWeight="SemiBold" 
+                               Margin="0,15,0,0"/>
+                    <TextBox x:Name="txtEmail" 
+                           TextChanged="TextBox_TextChanged"/>
+
+                    <TextBlock Text="* - обязательные поля" 
+                               FontSize="11" 
+                               Foreground="#7F8C8D"
+                               Margin="0,20,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Border Grid.Column="1" 
+                    Background="#F8F9FA" 
+                    Padding="30" 
+                    Margin="20,0"
+                    CornerRadius="5">
+                <StackPanel>
+                    <TextBlock Text="ИТОГОВАЯ СВОДКА" 
+                               FontSize="20" 
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+
+                    <StackPanel>
+                        <TextBlock Text="Конфигурация автомобиля:" 
+                                   FontWeight="SemiBold"/>
+                        <TextBlock x:Name="summaryModel" 
+                                   Text="не выбрана" 
+                                   Margin="10,2"/>
+                        <TextBlock x:Name="summaryEngine" 
+                                   Text="не выбран" 
+                                   Margin="10,2"/>
+                        <TextBlock x:Name="summaryColor" 
+                                   Text="не выбран" 
+                                   Margin="10,2"/>
+                        <TextBlock Text="Итоговая стоимость:" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,10,0,0"/>
+                        <TextBlock x:Name="summaryTotalPrice" 
+                                   Text="0 ₽" 
+                                   FontSize="18"
+                                   Foreground="#2C3E50"
+                                   Margin="10,5"/>
+
+                        <TextBlock Text="Кредитные условия:" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,10,0,0"/>
+                        <TextBlock x:Name="summaryDownPayment" 
+                                   Text="Первоначальный взнос: 0%" 
+                                   Margin="10,2"/>
+                        <TextBlock x:Name="summaryLoanTerm" 
+                                   Text="Срок: 0 месяцев" 
+                                   Margin="10,2"/>
+                        <TextBlock x:Name="summaryMonthlyPayment" 
+                                   Text="Ежемесячный платеж: 0 ₽" 
+                                   Margin="10,2"/>
+
+                        <Rectangle Height="2" 
+                                 Fill="#2C3E50" 
+                                 Margin="0,20"/>
+
+                        <TextBlock Text="Для оформления заявки заполните все поля слева и нажмите 'Оформить заявку'" 
+                                   TextWrapping="Wrap"
+                                   FontSize="12"
+                                   Foreground="#2C3E50"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

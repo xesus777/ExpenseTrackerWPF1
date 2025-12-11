@@ -67,8 +67,44 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\Step1Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Step2Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Step3Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Step4Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Step5Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\CarConfiguration.cs" />
+    <Compile Include="Pages\Step1Page.xaml.cs">
+      <DependentUpon>Step1Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Step2Page.xaml.cs">
+      <DependentUpon>Step2Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Step3Page.xaml.cs">
+      <DependentUpon>Step3Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Step4Page.xaml.cs">
+      <DependentUpon>Step4Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Step5Page.xaml.cs">
+      <DependentUpon>Step5Page.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -94,5 +130,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
