@@ -364,7 +364,7 @@ namespace WpfApp1.Models
                    $"Email: {Email ?? "Не указан"}";
         }
 
-        
+         
         public void Reset()
         {
             SelectedModel = null;
