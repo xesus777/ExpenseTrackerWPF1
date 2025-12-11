@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        
+       
         <TextBlock Grid.Row="0" 
                    Text="ШАГ 1: ВЫБОР МОДЕЛИ И ДВИГАТЕЛЯ" 
                    FontSize="18" 
