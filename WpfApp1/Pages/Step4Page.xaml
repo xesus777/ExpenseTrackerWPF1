@@ -117,7 +117,7 @@
                         </StackPanel>
 
                         <Rectangle Height="2" 
-                                 Fill="#2C3E50" 
+                                 Fill="#2C3E50"  
                                  Margin="0,20"/>
 
                         <StackPanel Orientation="Horizontal" 
