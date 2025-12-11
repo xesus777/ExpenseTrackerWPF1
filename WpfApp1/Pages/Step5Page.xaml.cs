@@ -107,7 +107,7 @@ namespace WpfApp1.Pages
                 return addr.Address == email;
             }
             catch
-            {
+            { 
                 return false;
             }
         }
