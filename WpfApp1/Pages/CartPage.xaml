@@ -9,6 +9,64 @@
       Title="CartPage">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Шапка -->
+        <Border Grid.Row="0" Background="#4CAF50" Padding="20">
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Корзина" 
+                         FontSize="24" 
+                         FontWeight="Bold" 
+                         Foreground="White"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Кнопка назад -->
+        <Button Grid.Row="0" 
+                Content="Назад к товарам" 
+                HorizontalAlignment="Left" 
+                Margin="20,0,0,0"
+                Padding="10,5"
+                Click="BackButton_Click"/>
+
+        <!-- Список товаров -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel x:Name="CartItemsPanel" 
+                       Margin="10"/>
+        </ScrollViewer>
+
+        <!-- Итого и кнопка -->
+        <Border Grid.Row="2" 
+                Background="#F5F5F5" 
+                Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock x:Name="TotalText" 
+                               FontSize="18" 
+                               FontWeight="Bold"/>
+                    <TextBlock x:Name="CountText" 
+                               FontSize="14" 
+                               Foreground="Gray"/>
+                </StackPanel>
+
+                <Button x:Name="CheckoutButton"
+                        Grid.Column="1" 
+                        Content="Оформить заказ" 
+                        Padding="20,10"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Click="CheckoutButton_Click"/>
+            </Grid>
+        </Border>
     </Grid>
 </Page>
