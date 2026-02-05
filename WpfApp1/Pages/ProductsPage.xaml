@@ -9,7 +9,35 @@
       Title="ProductsPage">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         
+        <Border Grid.Row="0" Background="#2196F3" Padding="20">
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Товары" 
+                         FontSize="24" 
+                         FontWeight="Bold" 
+                         Foreground="White"/>
+            </StackPanel>
+        </Border>
+
+        
+        <Button Grid.Row="0" 
+                Content="Корзина" 
+                HorizontalAlignment="Right" 
+                Margin="0,0,20,0"
+                Padding="10,5"
+                Click="CartButton_Click"/>
+
+        
+        <ScrollViewer Grid.Row="1">
+            <WrapPanel x:Name="ProductsPanel" 
+                       Margin="10"/>
+        </ScrollViewer>
     </Grid>
 
 </Page>
