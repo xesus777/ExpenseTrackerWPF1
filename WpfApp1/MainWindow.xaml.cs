@@ -19,6 +19,47 @@ namespace WpfApp1
 {
     public partial class MainWindow : Window
     {
-        
+        public static List<Products> AllProducts { get; set; }
+        public static List<CartItem> Cart { get; set; } = new List<CartItem>();
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            LoadProducts();
+            MainFrame.Navigate(new ProductsPage());
+        }
+
+        private void LoadProducts()
+        {
+            AllProducts = Core.Context.Products.ToList();
+        }
+
+        public static void AddToCart(Products product)
+        {
+            var item = Cart.FirstOrDefault(c => c.ProductId == product.Id);
+            if (item != null)
+            {
+                item.Quantity++;
+            }
+            else
+            {
+                Cart.Add(new CartItem
+                {
+                    ProductId = product.Id,
+                    Quantity = 1,
+                    Product = product
+                });
+            }
+        }
+
+        public static void RemoveFromCart(CartItem item)
+        {
+            Cart.Remove(item);
+        }
+
+        public static decimal GetTotalPrice()
+        {
+            return Cart.Sum(item => item.Product.Price * item.Quantity);
+        }
     }
 }
