@@ -15,14 +15,41 @@ using System.Windows.Shapes;
 
 namespace WpfApp1.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для LoginPage.xaml
-    /// </summary>
     public partial class LoginPage : Page
     {
+        public User LoggedUser { get; private set; }
+        public int ReturnSessionId { get; set; }
+
         public LoginPage()
         {
             InitializeComponent();
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Password))
+            {
+                MessageBox.Show("Enter username and password");
+                return;
+            }
+
+            var user = Core.Context.Users
+                .FirstOrDefault(u => u.Username == txtUsername.Text && u.Password == txtPassword.Password);
+
+            if (user != null)
+            {
+                LoggedUser = user;
+                (Application.Current.MainWindow as MainWindow)?.CloseLoginPage(this);
+            }
+            else
+            {
+                MessageBox.Show("Invalid username or password");
+            }
+        }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            (Application.Current.MainWindow as MainWindow)?.NavigateToRegister();
         }
     }
 }
