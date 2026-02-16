@@ -12,18 +12,13 @@ namespace WpfApp1
     using System;
     using System.Collections.Generic;
     
-    public partial class Genres
+    public partial class MovieGenres
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Genres()
-        {
-            this.MovieGenres = new HashSet<MovieGenres>();
-        }
-    
+        public int MovieID { get; set; }
         public int GenreID { get; set; }
-        public string GenreName { get; set; }
+        public string Description { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MovieGenres> MovieGenres { get; set; }
+        public virtual Genres Genres { get; set; }
+        public virtual Movies Movies { get; set; }
     }
 }

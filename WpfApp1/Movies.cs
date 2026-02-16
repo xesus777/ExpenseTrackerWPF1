@@ -17,8 +17,8 @@ namespace WpfApp1
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Movies()
         {
+            this.MovieGenres = new HashSet<MovieGenres>();
             this.Sessions = new HashSet<Sessions>();
-            this.Genres = new HashSet<Genres>();
         }
     
         public int MovieID { get; set; }
@@ -31,8 +31,8 @@ namespace WpfApp1
     
         public virtual AgeRatings AgeRatings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sessions> Sessions { get; set; }
+        public virtual ICollection<MovieGenres> MovieGenres { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Genres> Genres { get; set; }
+        public virtual ICollection<Sessions> Sessions { get; set; }
     }
 }

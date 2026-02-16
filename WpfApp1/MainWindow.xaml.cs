@@ -10,16 +10,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.Pages;
 
 namespace WpfApp1
 {
-
     public partial class MainWindow : Window
     {
-        public User CurrentUser { get; private set; }
+        public Users CurrentUser { get; private set; }
 
         public MainWindow()
         {
@@ -53,7 +51,7 @@ namespace WpfApp1
             MainFrame.Navigate(registerPage);
         }
 
-        public void NavigateToMovie(int movieId, User user)
+        public void NavigateToMovie(int movieId, Users user)
         {
             MoviePage moviePage = new MoviePage(movieId, user);
             MainFrame.Navigate(moviePage);

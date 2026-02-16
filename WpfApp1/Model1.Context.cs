@@ -13,10 +13,10 @@ namespace WpfApp1
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CinemaDB_NF3Entities : DbContext
+    public partial class CinemaDBEntities : DbContext
     {
-        public CinemaDB_NF3Entities()
-            : base("name=CinemaDB_NF3Entities")
+        public CinemaDBEntities()
+            : base("name=CinemaDBEntities")
         {
         }
     
@@ -29,6 +29,7 @@ namespace WpfApp1
         public virtual DbSet<Bookings> Bookings { get; set; }
         public virtual DbSet<Genres> Genres { get; set; }
         public virtual DbSet<Halls> Halls { get; set; }
+        public virtual DbSet<MovieGenres> MovieGenres { get; set; }
         public virtual DbSet<Movies> Movies { get; set; }
         public virtual DbSet<Seats> Seats { get; set; }
         public virtual DbSet<Sessions> Sessions { get; set; }

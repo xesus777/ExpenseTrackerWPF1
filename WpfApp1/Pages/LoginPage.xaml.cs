@@ -17,7 +17,7 @@ namespace WpfApp1.Pages
 {
     public partial class LoginPage : Page
     {
-        public User LoggedUser { get; private set; }
+        public Users LoggedUser { get; private set; }
         public int ReturnSessionId { get; set; }
 
         public LoginPage()

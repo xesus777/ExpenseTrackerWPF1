@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WpfApp1
 {
-    internal class Core
+    public partial class SeatsPartial
     {
-        public static CinemaDBEntities Context = new CinemaDBEntities();
+        public bool IsBooked { get; set; }
     }
 }

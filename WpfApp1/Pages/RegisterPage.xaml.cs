@@ -47,7 +47,7 @@ namespace WpfApp1.Pages
                 return;
             }
 
-            User newUser = new User
+            Users newUser = new Users
             {
                 Username = txtUsername.Text,
                 Password = txtPassword.Password,
