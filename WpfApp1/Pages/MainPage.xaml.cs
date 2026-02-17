@@ -17,107 +17,113 @@ namespace WpfApp1.Pages
 {
     public partial class MainPage : Page
     {
-        private Users currentUser;
-
         public MainPage()
         {
             InitializeComponent();
             LoadMovies();
-        }
-
-        public void SetCurrentUser(Users user)
-        {
-            currentUser = user;
-            UpdateLoginUI();
+            UpdateUserUI();
         }
 
         private void LoadMovies()
         {
-            var movies = Core.Context.Movies.Include("AgeRatings").ToList();
-            listMovies.ItemsSource = movies;
+            var movies = from m in Core.Context.Movies
+                         join ar in Core.Context.AgeRatings on m.AgeRatingID equals ar.AgeRatingID
+                         select new
+                         {
+                             m.MovieID,
+                             m.Title,
+                             m.Rating,
+                             m.StartDate,
+                             m.PosterPath,
+                             AgeRatingCode = ar.AgeRatingCode
+                         };
+
+            MoviesList.ItemsSource = movies.ToList();
         }
 
-        private void UpdateLoginUI()
+        private void UpdateUserUI()
         {
-            if (currentUser != null)
+            if (MainWindow.CurrentUser != null)
             {
-                btnLogin.Visibility = Visibility.Collapsed;
-                btnRegister.Visibility = Visibility.Collapsed;
-                btnProfile.Visibility = Visibility.Visible;
-                btnLogout.Visibility = Visibility.Visible;
+                UserInfoText.Text = $"Пользователь: {MainWindow.CurrentUser.Username}";
+                LoginRegisterBtn.Visibility = Visibility.Collapsed;
+                ProfileBtn.Visibility = Visibility.Visible;
+                LogoutBtn.Visibility = Visibility.Visible;
             }
             else
             {
-                btnLogin.Visibility = Visibility.Visible;
-                btnRegister.Visibility = Visibility.Visible;
-                btnProfile.Visibility = Visibility.Collapsed;
-                btnLogout.Visibility = Visibility.Collapsed;
+                UserInfoText.Text = "";
+                LoginRegisterBtn.Visibility = Visibility.Visible;
+                ProfileBtn.Visibility = Visibility.Collapsed;
+                LogoutBtn.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            ApplyFilterAndSort();
+        }
+
+        private void SortBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilterAndSort();
+        }
+
+        private void ApplyFilterAndSort()
+        {
+            var query = from m in Core.Context.Movies
+                        join ar in Core.Context.AgeRatings on m.AgeRatingID equals ar.AgeRatingID
+                        select new
+                        {
+                            m.MovieID,
+                            m.Title,
+                            m.Rating,
+                            m.StartDate,
+                            m.PosterPath,
+                            AgeRatingCode = ar.AgeRatingCode
+                        };
+
+            string search = SearchBox.Text?.ToLower() ?? "";
+            if (!string.IsNullOrWhiteSpace(search))
             {
-                listMovies.ItemsSource = Core.Context.Movies.Include("AgeRatings").ToList();
+                query = query.Where(m => m.Title.ToLower().Contains(search));
             }
-            else
+
+            var selectedSort = SortBox.SelectedItem as ComboBoxItem;
+            if (selectedSort?.Tag?.ToString() == "Title")
             {
-                var searchResult = Core.Context.Movies.Include("AgeRatings")
-                    .Where(m => m.Title.Contains(txtSearch.Text))
-                    .ToList();
-                listMovies.ItemsSource = searchResult;
+                query = query.OrderBy(m => m.Title);
             }
-        }
-
-        private void cmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (cmbSort.SelectedIndex)
+            else if (selectedSort?.Tag?.ToString() == "Rating")
             {
-                case 0:
-                    listMovies.ItemsSource = Core.Context.Movies.Include("AgeRatings")
-                        .OrderBy(m => m.Title).ToList();
-                    break;
-                case 1:
-                    listMovies.ItemsSource = Core.Context.Movies.Include("AgeRatings")
-                        .OrderBy(m => m.Rating).ToList();
-                    break;
-                case 2:
-                    listMovies.ItemsSource = Core.Context.Movies.Include("AgeRatings")
-                        .OrderByDescending(m => m.Rating).ToList();
-                    break;
+                query = query.OrderByDescending(m => m.Rating);
             }
+
+            MoviesList.ItemsSource = query.ToList();
         }
 
-        private void listMovies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MovieDetails_Click(object sender, RoutedEventArgs e)
         {
-            if (listMovies.SelectedItem is Movies selectedMovie)
-            {
-                (Application.Current.MainWindow as MainWindow)?.NavigateToMovie(selectedMovie.MovieID, currentUser);
-            }
+            Button btn = sender as Button;
+            int movieId = (int)btn.Tag;
+            NavigationService.Navigate(new MoviePage(movieId));
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private void LoginRegisterBtn_Click(object sender, RoutedEventArgs e)
         {
-            (Application.Current.MainWindow as MainWindow)?.NavigateToLogin();
+            NavigationService.Navigate(new LoginPage());
         }
 
-        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        private void ProfileBtn_Click(object sender, RoutedEventArgs e)
         {
-            (Application.Current.MainWindow as MainWindow)?.NavigateToRegister();
+            if (MainWindow.CurrentUser != null)
+                NavigationService.Navigate(new ProfilePage());
         }
 
-        private void btnProfile_Click(object sender, RoutedEventArgs e)
+        private void LogoutBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (currentUser != null)
-            {
-                (Application.Current.MainWindow as MainWindow)?.NavigateToProfile(currentUser.UserID);
-            }
-        }
-
-        private void btnLogout_Click(object sender, RoutedEventArgs e)
-        {
-            (Application.Current.MainWindow as MainWindow)?.Logout();
+            MainWindow.CurrentUser = null;
+            UpdateUserUI();
         }
     }
 }

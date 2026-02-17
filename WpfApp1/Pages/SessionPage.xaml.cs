@@ -18,156 +18,170 @@ namespace WpfApp1.Pages
     public partial class SessionPage : Page
     {
         private int sessionId;
-        private int userId;
-        private int movieId;
-        private dynamic selectedSeat; 
+        private int hallId;
+        private string movieTitle;
+        private string hallName;
+        private DateTime sessionDate;
+        private TimeSpan sessionTime;
+        private decimal price;
+        private List<Seats> allSeats;
+        private List<int> bookedSeatIds;
+        private Seats selectedSeat = null;
 
-        public SessionPage(int sessionId, int userId)
+        public SessionPage(int sessionId)
         {
             InitializeComponent();
-            this.sessionId = sessionId;
-            this.userId = userId;
 
-            LoadSessionInfo();
-            LoadSeats();
+            if (MainWindow.CurrentUser == null)
+            {
+                NavigationService.Navigate(new LoginPage());
+                return;
+            }
+
+            this.sessionId = sessionId;
+            LoadData();
+            
         }
 
-        private void LoadSessionInfo()
+        private void LoadData()
         {
-            var session = Core.Context.Sessions.Find(sessionId);
-            if (session == null) return;
-
-            var movie = Core.Context.Movies.Find(session.MovieID);
+            var session = (from s in Core.Context.Sessions
+                           join m in Core.Context.Movies on s.MovieID equals m.MovieID
+                           join h in Core.Context.Halls on s.HallID equals h.HallID
+                           where s.SessionID == sessionId
+                           select new
+                           {
+                               s.SessionID,
+                               s.SessionDate,
+                               s.SessionTime,
+                               s.Price,
+                               s.HallID,
+                               m.Title,
+                               h.HallName
+                           }).FirstOrDefault();
 
             if (session != null)
             {
-                movieId = session.MovieID ?? 0;
-                txtSessionInfo.Text = $"Session: {session.SessionDate:dd.MM.yyyy} {session.SessionTime} - Hall: {session.Halls?.HallName}";
-                txtPrice.Text = $"Price: {session.Price} RUB";
+                hallId = session.HallID??0;
+                movieTitle = session.Title;
+                hallName = session.HallName;
+                sessionDate = session.SessionDate;
+                sessionTime = session.SessionTime;
+                price = session.Price;
+
+                SessionInfo.Text = $"{movieTitle} - Зал {hallName} - {sessionDate:dd.MM.yyyy} {sessionTime}";
             }
-        }
 
-        private void LoadSeats()
-        {
-            var session = Core.Context.Sessions.Find(sessionId);
-            if (session == null) return;
-
-            var allSeats = Core.Context.Seats
-                .Where(s => s.HallID == session.HallID)
+            LoadBookedSeats();
+            allSeats = Core.Context.Seats
+                .Where(s => s.HallID == hallId)
                 .OrderBy(s => s.SeatRow)
                 .ThenBy(s => s.SeatNumber)
                 .ToList();
 
-            var bookedSeatIds = Core.Context.Bookings
+            UpdateSeatsDisplay();
+        }
+
+        private void LoadBookedSeats()
+        {
+            bookedSeatIds = Core.Context.Bookings
                 .Where(b => b.SessionID == sessionId && b.IsActive == true)
                 .Select(b => b.SeatID)
+                .ToList()
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
                 .ToList();
+        }
 
-            
-            var seatsForDisplay = allSeats.Select(seat => new
+        private void UpdateSeatsDisplay()
+        {
+            var seatsToShow = allSeats.Select(s => new
             {
-                seat.SeatID,
-                seat.SeatRow,
-                seat.SeatNumber,
-                seat.IsAvailable,
-                IsBooked = bookedSeatIds.Contains(seat.SeatID)
+                SeatID = s.SeatID,
+                SeatNumber = $"{s.SeatRow}-{s.SeatNumber}",
+                IsAvailable = !bookedSeatIds.Contains(s.SeatID)
             }).ToList();
 
-            seatsContainer.ItemsSource = seatsForDisplay;
+            SeatsGrid.ItemsSource = seatsToShow;
         }
 
-        private void Seat_Click(object sender, RoutedEventArgs e)
+        private void ClearAllBookedSeats_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            dynamic seat = btn.DataContext; 
+            var result = MessageBox.Show("Вы уверены, что хотите очистить все занятые места на этом сеансе?",
+                                        "Подтверждение",
+                                        MessageBoxButton.YesNo,
+                                        MessageBoxImage.Question);
 
-            if (seat.IsBooked)
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBox.Show("This seat is already taken");
-                return;
-            }
+                var bookingsToDelete = Core.Context.Bookings
+                    .Where(b => b.SessionID == sessionId && b.IsActive == true)
+                    .ToList();
 
-            if (selectedSeat != null)
-            {
-                
-                foreach (var item in seatsContainer.Items)
+                foreach (var booking in bookingsToDelete)
                 {
-                    if (item != null && (int)item.GetType().GetProperty("SeatID").GetValue(item) == (int)selectedSeat.GetType().GetProperty("SeatID").GetValue(selectedSeat))
-                    {
-                        var container = seatsContainer.ItemContainerGenerator.ContainerFromItem(item) as ContentPresenter;
-                        if (container != null)
-                        {
-                            var button = FindVisualChild<Button>(container);
-                            if (button != null)
-                                button.Background = new SolidColorBrush(Colors.LightGreen);
-                        }
-                        break;
-                    }
+                    booking.IsActive = false;
                 }
-            }
 
-            if (selectedSeat != null && (int)selectedSeat.GetType().GetProperty("SeatID").GetValue(selectedSeat) == (int)seat.GetType().GetProperty("SeatID").GetValue(seat))
-            {
-                selectedSeat = null;
-                btn.Background = new SolidColorBrush(Colors.LightGreen);
-            }
-            else
-            {
-                selectedSeat = seat;
-                btn.Background = new SolidColorBrush(Colors.Yellow);
+                Core.Context.SaveChanges();
+
+                LoadBookedSeats();
+                UpdateSeatsDisplay();
+                ClearSelectedSeat();
+
+                MessageBox.Show("Все места очищены!");
             }
         }
 
-        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child != null && child is T)
-                    return (T)child;
-                else
-                {
-                    var result = FindVisualChild<T>(child);
-                    if (result != null)
-                        return result;
-                }
-            }
-            return null;
-        }
-
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+        private void ClearSelectedSeat()
         {
             selectedSeat = null;
-            LoadSeats();
+            SelectedSeatText.Text = "";
+            BookButton.IsEnabled = false;
         }
 
-        private void btnBook_Click(object sender, RoutedEventArgs e)
+        private void SelectSeat_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedSeat == null)
+            Button btn = sender as Button;
+            int seatId = (int)btn.Tag;
+
+            if (bookedSeatIds.Contains(seatId))
             {
-                MessageBox.Show("Select a seat");
+                MessageBox.Show("Это место уже занято");
                 return;
             }
 
-            int seatId = (int)selectedSeat.GetType().GetProperty("SeatID").GetValue(selectedSeat);
-
-            var existingBooking = Core.Context.Bookings
-                .FirstOrDefault(b => b.SessionID == sessionId && b.SeatID == seatId && b.IsActive == true);
-
-            if (existingBooking != null)
-            {
-                MessageBox.Show("This seat was just taken. Please select another.");
-                LoadSeats();
-                return;
-            }
-
-            (Application.Current.MainWindow as MainWindow)?.NavigateToBooking(sessionId, userId, seatId);
+            selectedSeat = allSeats.First(s => s.SeatID == seatId);
+            SelectedSeatText.Text = $"Выбрано место: {selectedSeat.SeatRow}-{selectedSeat.SeatNumber}";
+            BookButton.IsEnabled = true;
         }
 
-        private void btnBack_Click(object sender, RoutedEventArgs e)
+        private void BookTicket_Click(object sender, RoutedEventArgs e)
         {
-            var user = Core.Context.Users.Find(userId);
-            (Application.Current.MainWindow as MainWindow)?.NavigateToMovie(movieId, user);
+            if (selectedSeat != null)
+            {
+                NavigationService.Navigate(new BookingPage(sessionId, selectedSeat.SeatID));
+            }
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
+
+    public class BoolToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            bool isAvailable = (bool)value;
+            return isAvailable ? new SolidColorBrush(Colors.LightGreen) : new SolidColorBrush(Colors.LightGray);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

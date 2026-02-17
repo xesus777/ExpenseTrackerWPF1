@@ -8,87 +8,43 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MoviePage">
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <Button Content="← Назад" Click="Back_Click" HorizontalAlignment="Left" Margin="0,0,0,10"/>
 
-        <!-- Left column - poster -->
-        <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,10,0" Background="#F0F0F0" Height="300">
-            <TextBlock Text="[Movie Poster]" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
-        </Border>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Image x:Name="PosterImage" Width="200" Height="250" Stretch="UniformToFill" Margin="0,0,20,0"/>
+                <StackPanel>
+                    <TextBlock x:Name="TitleText" FontSize="24" FontWeight="Bold" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="RatingText" Margin="0,5"/>
+                    <TextBlock x:Name="AgeRatingText" Margin="0,5"/>
+                    <TextBlock x:Name="GenresText" TextWrapping="Wrap" Margin="0,5"/>
+                    <TextBlock x:Name="DescriptionText" TextWrapping="Wrap" Margin="0,5"/>
+                </StackPanel>
+            </StackPanel>
 
-        <!-- Right column - movie info -->
-        <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
-            <TextBlock x:Name="txtTitle" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Сеансы:" FontSize="18" FontWeight="Bold" Margin="10,20,10,10"/>
 
-            <WrapPanel Margin="0,0,0,5">
-                <TextBlock Text="Rating: " FontWeight="Bold"/>
-                <TextBlock x:Name="txtRating" Margin="0,0,15,0"/>
-
-                <TextBlock Text="Age: " FontWeight="Bold"/>
-                <TextBlock x:Name="txtAgeRating" Margin="0,0,15,0"/>
-            </WrapPanel>
-
-            <TextBlock Text="Genres:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <ListBox x:Name="listGenres" Height="80" Margin="0,0,0,10" BorderThickness="0">
+            <ListBox x:Name="SessionsList" Margin="10">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="5" Margin="2">
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="5" Padding="10">
                             <StackPanel>
-                                <TextBlock Text="{Binding Genre.GenreName}" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Description}" FontSize="11" Foreground="Gray"/>
+                                <TextBlock Text="{Binding SessionDate, StringFormat={}{0:dd.MM.yyyy}}" FontWeight="Bold"/>
+                                <TextBlock Text="Время: " Margin="0,5,0,0"/>
+                                <TextBlock Text="{Binding SessionTime}"/>
+                                <TextBlock Text="Зал: " Margin="0,5,0,0"/>
+                                <TextBlock Text="{Binding HallName}"/>
+                                <TextBlock Text="Рейтинг зала: " Margin="0,5,0,0"/>
+                                <TextBlock Text="{Binding HallRating}"/>
+                                <TextBlock Text="Цена: " Margin="0,5,0,0"/>
+                                <TextBlock Text="{Binding Price}"/>
+                                <Button Content="Выбрать места" Click="SelectSession_Click" Tag="{Binding SessionID}" Margin="0,10,0,0"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-
-            <TextBlock Text="Release date: " FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock x:Name="txtStartDate" Margin="0,0,0,10"/>
-
-            <TextBlock Text="Description:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" CornerRadius="3" Margin="0,0,0,10">
-                <TextBlock x:Name="txtDescription" TextWrapping="Wrap" Height="100"/>
-            </Border>
         </StackPanel>
-
-        <!-- Sessions list -->
-        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10" CornerRadius="5" Margin="0,10,0,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Text="Available sessions" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-
-                <ListBox x:Name="listSessions" Grid.Row="1" SelectionChanged="listSessions_SelectionChanged">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="10" Margin="2">
-                                <StackPanel>
-                                    <TextBlock Text="{Binding SessionDate, StringFormat={}{0:dd.MM.yyyy} {Binding SessionTime}}" FontWeight="Bold"/>
-                                    <WrapPanel>
-                                        <TextBlock Text="Hall: " FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Halls.HallName}" Margin="0,0,10,0"/>
-                                        <TextBlock Text="Hall rating: " FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Halls.HallRating}"/>
-                                    </WrapPanel>
-                                    <TextBlock Text="Price: " FontWeight="Bold">
-                                        <Run Text="{Binding Price}"/> RUB
-                                    </TextBlock>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </Border>
-    </Grid>
+    </ScrollViewer>
 </Page>

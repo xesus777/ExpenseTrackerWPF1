@@ -17,48 +17,51 @@ namespace WpfApp1.Pages
 {
     public partial class ProfilePage : Page
     {
-        private int userId;
-
-        public ProfilePage(int userId)
+        public ProfilePage()
         {
             InitializeComponent();
-            this.userId = userId;
-
             LoadUserInfo();
             LoadUserBookings();
         }
 
         private void LoadUserInfo()
         {
-            var user = Core.Context.Users.Find(userId);
+            var user = MainWindow.CurrentUser;
             if (user != null)
             {
-                txtUserName.Text = $"Username: {user.Username}";
-                txtUserEmail.Text = $"Email: {user.Email}";
-                txtUserFullName.Text = $"Full name: {user.FullName}";
+                UsernameText.Text = $"Логин: {user.Username}";
+                EmailText.Text = $"Email: {user.Email ?? "не указан"}";
+                FullNameText.Text = $"Полное имя: {user.FullName ?? "не указано"}";
+                RegDateText.Text = $"Дата регистрации: {user.RegistrationDate:dd.MM.yyyy}";
             }
         }
 
         private void LoadUserBookings()
         {
-            var bookings = Core.Context.Bookings
-                .Where(b => b.UserID == userId && b.IsActive == true)
-                .OrderByDescending(b => b.BookingDate)
-                .ToList();
+            var bookings = from b in Core.Context.Bookings
+                           join s in Core.Context.Sessions on b.SessionID equals s.SessionID
+                           join m in Core.Context.Movies on s.MovieID equals m.MovieID
+                           join h in Core.Context.Halls on s.HallID equals h.HallID
+                           join se in Core.Context.Seats on b.SeatID equals se.SeatID
+                           where b.UserID == MainWindow.CurrentUser.UserID && b.IsActive == true
+                           orderby s.SessionDate descending, s.SessionTime descending
+                           select new
+                           {
+                               Title = m.Title,
+                               SessionDate = s.SessionDate,
+                               SessionTime = s.SessionTime,
+                               HallName = h.HallName,
+                               SeatRow = se.SeatRow,
+                               SeatNumber = se.SeatNumber,
+                               Price = s.Price
+                           };
 
-            var bookingsForDisplay = bookings.Select(b => new
-            {
-                b.BookingID,
-                MovieTitle = b.Sessions?.Movies?.Title ?? "Unknown",
-                HallName = b.Sessions?.Halls?.HallName ?? "Unknown",
-                SessionDate = b.Sessions?.SessionDate,
-                SessionTime = b.Sessions?.SessionTime,
-                SeatRow = b.Seats?.SeatRow,
-                SeatNumber = b.Seats?.SeatNumber,
-                Price = b.Sessions?.Price ?? 0
-            }).ToList();
+            BookingsList.ItemsSource = bookings.ToList();
+        }
 
-            listBookings.ItemsSource = bookingsForDisplay;
+        private void Back_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

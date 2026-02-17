@@ -18,75 +18,85 @@ namespace WpfApp1.Pages
     public partial class BookingPage : Page
     {
         private int sessionId;
-        private int userId;
         private int seatId;
+        private string movieTitle;
+        private string hallName;
+        private DateTime sessionDate;
+        private TimeSpan sessionTime;
+        private decimal price;
+        private Seats seat;
 
-        public BookingPage(int sessionId, int userId, int seatId)
+        public BookingPage(int sessionId, int seatId)
         {
             InitializeComponent();
             this.sessionId = sessionId;
-            this.userId = userId;
             this.seatId = seatId;
-
-            LoadBookingInfo();
+            LoadData();
         }
 
-        private void LoadBookingInfo()
+        private void LoadData()
         {
-            var session = Core.Context.Sessions.Find(sessionId);
-            if (session == null) return;
+            var session = (from s in Core.Context.Sessions
+                           join m in Core.Context.Movies on s.MovieID equals m.MovieID
+                           join h in Core.Context.Halls on s.HallID equals h.HallID
+                           where s.SessionID == sessionId
+                           select new
+                           {
+                               m.Title,
+                               h.HallName,
+                               s.SessionDate,
+                               s.SessionTime,
+                               s.Price
+                           }).FirstOrDefault();
 
-            var movie = Core.Context.Movies.Find(session.MovieID);
-            var seat = Core.Context.Seats.Find(seatId);
+            seat = Core.Context.Seats.FirstOrDefault(s => s.SeatID == seatId);
 
-            if (session != null && movie != null && seat != null)
+            if (session != null && seat != null)
             {
-                txtMovie.Text = movie.Title;
-                txtHall.Text = session.Halls?.HallName;
-                txtDateTime.Text = $"{session.SessionDate:dd.MM.yyyy} {session.SessionTime}";
-                txtSeat.Text = $"Row {seat.SeatRow} Seat {seat.SeatNumber}";
-                txtPrice.Text = $"{session.Price} RUB";
+                movieTitle = session.Title;
+                hallName = session.HallName;
+                sessionDate = session.SessionDate;
+                sessionTime = session.SessionTime;
+                price = session.Price;
+
+                MovieText.Text = $"Фильм: {movieTitle}";
+                HallText.Text = $"Зал: {hallName}";
+                DateTimeText.Text = $"Дата и время: {sessionDate:dd.MM.yyyy} {sessionTime}";
+                SeatText.Text = $"Место: {seat.SeatRow} ряд, {seat.SeatNumber} место";
+                PriceText.Text = $"Цена: {price} руб.";
             }
         }
 
-        private void btnConfirm_Click(object sender, RoutedEventArgs e)
+        private void ConfirmBooking_Click(object sender, RoutedEventArgs e)
         {
-            try
+            bool isBooked = Core.Context.Bookings.Any(b => b.SessionID == sessionId && b.SeatID == seatId && b.IsActive == true);
+
+            if (isBooked)
             {
-                var existingBooking = Core.Context.Bookings
-                    .FirstOrDefault(b => b.SessionID == sessionId && b.SeatID == seatId && b.IsActive == true);
-
-                if (existingBooking != null)
-                {
-                    MessageBox.Show("This seat was just taken. Please select another.");
-                    (Application.Current.MainWindow as MainWindow)?.NavigateToSession(sessionId, userId);
-                    return;
-                }
-
-                Bookings newBooking = new Bookings
-                {
-                    UserID = userId,
-                    SessionID = sessionId,
-                    SeatID = seatId,
-                    BookingDate = DateTime.Now,
-                    IsActive = true
-                };
-
-                Core.Context.Bookings.Add(newBooking);
-                Core.Context.SaveChanges();
-
-                MessageBox.Show("Ticket booked successfully!");
-                (Application.Current.MainWindow as MainWindow)?.NavigateToMain();
+                MessageBox.Show("Извините, это место уже занято");
+                NavigationService.Navigate(new MainPage());
+                return;
             }
-            catch (Exception ex)
+
+            Bookings newBooking = new Bookings
             {
-                MessageBox.Show("Error booking ticket: " + ex.Message);
-            }
+                UserID = MainWindow.CurrentUser.UserID,
+                SessionID = sessionId,
+                SeatID = seatId,
+                BookingDate = DateTime.Now,
+                IsActive = true
+            };
+
+            Core.Context.Bookings.Add(newBooking);
+            Core.Context.SaveChanges();
+
+            MessageBox.Show("Билет успешно забронирован!");
+            NavigationService.Navigate(new MainPage());
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            (Application.Current.MainWindow as MainWindow)?.NavigateToSession(sessionId, userId);
+            NavigationService.GoBack();
         }
     }
 }

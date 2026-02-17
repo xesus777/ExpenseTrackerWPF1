@@ -8,50 +8,38 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SessionPage">
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Page.Resources>
+        <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    </Page.Resources>
 
-        
-        <Border Grid.Row="0" Background="#F0F0F0" Padding="10" CornerRadius="5" Margin="0,0,0,10">
-            <StackPanel>
-                <TextBlock x:Name="txtSessionInfo" FontSize="16" FontWeight="Bold"/>
-                <TextBlock x:Name="txtPrice" Margin="0,5,0,0"/>
-            </StackPanel>
-        </Border>
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <Button Content="← Назад" Click="Back_Click" HorizontalAlignment="Left" Margin="0,0,0,10"/>
 
-        
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="seatsContainer">
-                <ItemsControl.ItemsPanel>
+            <TextBlock x:Name="SessionInfo" FontSize="16" FontWeight="Bold" Margin="5"/>
+
+            <Button Content="Очистить все занятые места" Click="ClearAllBookedSeats_Click" Margin="5" Padding="5" />
+
+            <ListBox x:Name="SeatsGrid" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" MaxWidth="550"/>
+                        <WrapPanel/>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button x:Name="btnSeat" 
-                                Width="50" Height="50" Margin="2" 
-                                Click="Seat_Click"
-                                Tag="{Binding SeatID}">
-                            <StackPanel>
-                                <TextBlock Text="{Binding SeatRow}" HorizontalAlignment="Center" FontSize="10"/>
-                                <TextBlock Text="{Binding SeatNumber}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14"/>
-                            </StackPanel>
-                        </Button>
+                        <Border BorderBrush="Black" BorderThickness="1" Width="50" Height="50" Margin="2">
+                            <Button Content="{Binding SeatNumber}" 
+                                    Click="SelectSeat_Click"
+                                    Tag="{Binding SeatID}"
+                                    Background="{Binding IsAvailable, Converter={StaticResource BoolToColorConverter}}"/>
+                        </Border>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-        
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <Button x:Name="btnClear" Content="Clear selection" Width="120" Height="30" Margin="5" Click="btnClear_Click"/>
-            <Button x:Name="btnBook" Content="Book ticket" Width="120" Height="30" Margin="5" Click="btnBook_Click" Background="LightGreen"/>
-            <Button x:Name="btnBack" Content="Back to movie" Width="120" Height="30" Margin="5" Click="btnBack_Click"/>
+            <TextBlock x:Name="SelectedSeatText" Margin="5"/>
+            <Button x:Name="BookButton" Content="Оформить билет" Click="BookTicket_Click" Margin="5" Padding="5" IsEnabled="False"/>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Page>

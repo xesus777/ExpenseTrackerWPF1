@@ -17,39 +17,37 @@ namespace WpfApp1.Pages
 {
     public partial class LoginPage : Page
     {
-        public Users LoggedUser { get; private set; }
-        public int ReturnSessionId { get; set; }
-
         public LoginPage()
         {
             InitializeComponent();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Password))
-            {
-                MessageBox.Show("Enter username and password");
-                return;
-            }
+            string login = LoginBox.Text;
+            string password = PasswordBox.Password;
 
-            var user = Core.Context.Users
-                .FirstOrDefault(u => u.Username == txtUsername.Text && u.Password == txtPassword.Password);
+            var user = Core.Context.Users.FirstOrDefault(u => u.Username == login && u.Password == password);
 
             if (user != null)
             {
-                LoggedUser = user;
-                (Application.Current.MainWindow as MainWindow)?.CloseLoginPage(this);
+                MainWindow.CurrentUser = user;
+                NavigationService.Navigate(new MainPage());
             }
             else
             {
-                MessageBox.Show("Invalid username or password");
+                MessageText.Text = "Неверный логин или пароль";
             }
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        private void ToRegisterPage_Click(object sender, RoutedEventArgs e)
         {
-            (Application.Current.MainWindow as MainWindow)?.NavigateToRegister();
+            NavigationService.Navigate(new RegisterPage());
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

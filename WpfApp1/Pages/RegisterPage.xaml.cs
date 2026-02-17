@@ -22,45 +22,56 @@ namespace WpfApp1.Pages
             InitializeComponent();
         }
 
-        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        private void Register_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtUsername.Text) ||
-                string.IsNullOrWhiteSpace(txtPassword.Password) ||
-                string.IsNullOrWhiteSpace(txtConfirmPassword.Password))
+            string login = LoginBox.Text;
+            string password = PasswordBox.Password;
+            string confirmPassword = ConfirmPasswordBox.Password;
+            string email = EmailBox.Text;
+            string fullName = FullNameBox.Text;
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show("Fill all required fields");
+                MessageText.Text = "Заполните логин и пароль";
                 return;
             }
 
-            if (txtPassword.Password != txtConfirmPassword.Password)
+            if (password != confirmPassword)
             {
-                MessageBox.Show("Passwords do not match");
+                MessageText.Text = "Пароли не совпадают";
                 return;
             }
 
-            var existingUser = Core.Context.Users
-                .FirstOrDefault(u => u.Username == txtUsername.Text);
-
-            if (existingUser != null)
+            if (Core.Context.Users.Any(u => u.Username == login))
             {
-                MessageBox.Show("Username already exists");
+                MessageText.Text = "Пользователь с таким логином уже существует";
                 return;
             }
 
             Users newUser = new Users
             {
-                Username = txtUsername.Text,
-                Password = txtPassword.Password,
-                Email = txtEmail.Text,
-                FullName = txtFullName.Text,
+                Username = login,
+                Password = password,
+                Email = email,
+                FullName = fullName,
                 RegistrationDate = DateTime.Now
             };
 
             Core.Context.Users.Add(newUser);
             Core.Context.SaveChanges();
 
-            MessageBox.Show("Registration successful! You can now login.");
-            (Application.Current.MainWindow as MainWindow)?.NavigateToLogin();
+            MessageBox.Show("Регистрация успешна! Теперь войдите в систему.");
+            NavigationService.Navigate(new LoginPage());
+        }
+
+        private void ToLoginPage_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new LoginPage());
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

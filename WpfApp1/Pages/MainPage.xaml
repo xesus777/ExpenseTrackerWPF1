@@ -15,55 +15,40 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top panel -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
-            <Button x:Name="btnLogin" Content="Login" Width="80" Height="30" Margin="5" Click="btnLogin_Click"/>
-            <Button x:Name="btnRegister" Content="Register" Width="80" Height="30" Margin="5" Click="btnRegister_Click"/>
-            <Button x:Name="btnProfile" Content="Profile" Width="80" Height="30" Margin="5" Click="btnProfile_Click" Visibility="Collapsed"/>
-            <Button x:Name="btnLogout" Content="Logout" Width="80" Height="30" Margin="5" Click="btnLogout_Click" Visibility="Collapsed"/>
+            <TextBlock x:Name="UserInfoText" VerticalAlignment="Center" Margin="5"/>
+            <Button x:Name="LoginRegisterBtn" Content="Вход" Click="LoginRegisterBtn_Click" Margin="5" Padding="10,5"/>
+            <Button x:Name="ProfileBtn" Content="Личный кабинет" Click="ProfileBtn_Click" Margin="5" Padding="10,5" Visibility="Collapsed"/>
+            <Button x:Name="LogoutBtn" Content="Выход" Click="LogoutBtn_Click" Margin="5" Padding="10,5" Visibility="Collapsed"/>
         </StackPanel>
 
-        <!-- Search and sort panel -->
-        <Border Grid.Row="1" Background="#F0F0F0" Padding="10" CornerRadius="5" Margin="0,0,0,10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox x:Name="SearchBox" Width="300" Margin="5" TextChanged="SearchBox_TextChanged"/>
+            <ComboBox x:Name="SortBox" Width="150" Margin="5" SelectionChanged="SortBox_SelectionChanged">
+                <ComboBoxItem Tag="Title">По названию</ComboBoxItem>
+                <ComboBoxItem Tag="Rating">По рейтингу</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
 
-                <TextBox x:Name="txtSearch" Grid.Column="0" Height="30" Padding="5" TextChanged="txtSearch_TextChanged"/>
-
-                <TextBlock Grid.Column="1" Text="Sort by:" VerticalAlignment="Center" Margin="10,0,5,0"/>
-                <ComboBox x:Name="cmbSort" Grid.Column="2" Width="150" Height="30" SelectionChanged="cmbSort_SelectionChanged">
-                    <ComboBoxItem Content="Title" IsSelected="True"/>
-                    <ComboBoxItem Content="Rating (ascending)"/>
-                    <ComboBoxItem Content="Rating (descending)"/>
-                </ComboBox>
-            </Grid>
-        </Border>
-
-        <!-- Movies list -->
-        <ListBox x:Name="listMovies" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="listMovies_SelectionChanged">
+        <ListBox x:Name="MoviesList" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                    <WrapPanel/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
-
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="5" Width="200" Background="White">
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5" Padding="10" Width="200">
                         <StackPanel>
-                            <Border Background="#E0E0E0" Height="150" Margin="0,0,0,5">
-                                <TextBlock Text="[Poster]" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" TextWrapping="Wrap"/>
-                            <TextBlock Text="Rating: " FontWeight="Bold"><Run Text="{Binding Rating}"/></TextBlock>
-                            <TextBlock Text="Start date: " FontWeight="Bold"><Run Text="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/></TextBlock>
-                            <TextBlock Text="Age: " FontWeight="Bold">
-                                <Run Text="{Binding AgeRatings.AgeRatingCode}"/>
-                            </TextBlock>
+                            <Image Source="{Binding PosterPath}" Width="Auto" Height="Auto" Stretch="UniformToFill" Margin="0,0,0,10"/>
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" TextWrapping="Wrap"/>
+                            <TextBlock Text="Рейтинг: " Margin="0,5,0,0"/>
+                            <TextBlock Text="{Binding Rating}"/>
+                            <TextBlock Text="Дата: " Margin="0,5,0,0"/>
+                            <TextBlock Text="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                            <TextBlock Text="Возраст: " Margin="0,5,0,0"/>
+                            <TextBlock Text="{Binding AgeRatingCode}"/>
+                            <Button Content="Подробнее" Click="MovieDetails_Click" Tag="{Binding MovieID}" Margin="0,10,0,0"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>

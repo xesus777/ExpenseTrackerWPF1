@@ -8,38 +8,33 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="RegisterPage">
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <ScrollViewer>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="10">
+            <Button Content="← Назад" Click="Back_Click" HorizontalAlignment="Left" Margin="0,0,0,10"/>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Register new user" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+            <TextBlock Text="Регистрация" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Username:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox x:Name="txtUsername" Grid.Row="1" Grid.Column="1" Height="25" Margin="5"/>
+            <TextBlock Text="Логин:" Margin="5"/>
+            <TextBox x:Name="LoginBox" Margin="5"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Password:" VerticalAlignment="Center" Margin="5"/>
-        <PasswordBox x:Name="txtPassword" Grid.Row="2" Grid.Column="1" Height="25" Margin="5"/>
+            <TextBlock Text="Пароль:" Margin="5"/>
+            <PasswordBox x:Name="PasswordBox" Margin="5"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Confirm:" VerticalAlignment="Center" Margin="5"/>
-        <PasswordBox x:Name="txtConfirmPassword" Grid.Row="3" Grid.Column="1" Height="25" Margin="5"/>
+            <TextBlock Text="Подтверждение пароля:" Margin="5"/>
+            <PasswordBox x:Name="ConfirmPasswordBox" Margin="5"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Email:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox x:Name="txtEmail" Grid.Row="4" Grid.Column="1" Height="25" Margin="5"/>
+            <TextBlock Text="Email:" Margin="5"/>
+            <TextBox x:Name="EmailBox" Margin="5"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Full name:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox x:Name="txtFullName" Grid.Row="5" Grid.Column="1" Height="25" Margin="5"/>
+            <TextBlock Text="Полное имя:" Margin="5"/>
+            <TextBox x:Name="FullNameBox" Margin="5"/>
 
-        <Button x:Name="btnRegister" Grid.Row="6" Grid.ColumnSpan="2" Content="Register" Height="30" Width="150" Margin="5" Click="btnRegister_Click"/>
-    </Grid>
+            <Button Content="Зарегистрироваться" Click="Register_Click" Margin="5" Padding="5"/>
+
+            <TextBlock Text="Уже есть аккаунт?" HorizontalAlignment="Center" Margin="10,20,10,5"/>
+            <Button Content="Войти" Click="ToLoginPage_Click" Margin="5" Padding="5"/>
+
+            <TextBlock x:Name="MessageText" Foreground="Red" TextWrapping="Wrap" Margin="5"/>
+        </StackPanel>
+    </ScrollViewer>
 </Page>

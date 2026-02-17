@@ -19,70 +19,85 @@ namespace WpfApp1.Pages
     public partial class MoviePage : Page
     {
         private int movieId;
-        private Users currentUser;
 
-        public MoviePage(int movieId, Users user)
+        public MoviePage(int movieId)
         {
             InitializeComponent();
             this.movieId = movieId;
-            this.currentUser = user;
-
-            LoadMovieInfo();
+            LoadMovie();
             LoadSessions();
         }
 
-        private void LoadMovieInfo()
+        private void LoadMovie()
         {
-            var movie = Core.Context.Movies
-                .FirstOrDefault(m => m.MovieID == movieId);
-
+            var movie = Core.Context.Movies.FirstOrDefault(m => m.MovieID == movieId);
             if (movie != null)
             {
-                txtTitle.Text = movie.Title;
-                txtDescription.Text = movie.Description;
-                txtRating.Text = movie.Rating?.ToString("F1") ?? "N/A";
+                var ageRating = Core.Context.AgeRatings.FirstOrDefault(ar => ar.AgeRatingID == movie.AgeRatingID);
 
-                if (movie.AgeRatings != null)
+                TitleText.Text = movie.Title;
+                RatingText.Text = $"Рейтинг: {movie.Rating}";
+                AgeRatingText.Text = $"Возрастной рейтинг: {ageRating?.AgeRatingCode}";
+                DescriptionText.Text = $"Описание: {movie.Description}";
+
+                if (!string.IsNullOrEmpty(movie.PosterPath))
                 {
-                    txtAgeRating.Text = movie.AgeRatings.AgeRatingCode;
+                    try
+                    {
+                        PosterImage.Source = new BitmapImage(new Uri(movie.PosterPath, UriKind.RelativeOrAbsolute));
+                    }
+                    catch
+                    {
+                        
+                    }
                 }
 
-                txtStartDate.Text = movie.StartDate?.ToString("dd.MM.yyyy") ?? "N/A";
+                var genres = from mg in Core.Context.MovieGenres
+                             join g in Core.Context.Genres on mg.GenreID equals g.GenreID
+                             where mg.MovieID == movieId
+                             select g.GenreName;
 
-                
-                var genres = Core.Context.MovieGenres
-                    .Where(mg => mg.MovieID == movieId)
-                    .ToList();
-
-                listGenres.ItemsSource = genres;
+                GenresText.Text = $"Жанры: {string.Join(", ", genres.ToList())}";
             }
         }
 
         private void LoadSessions()
         {
-            var sessions = Core.Context.Sessions
-                .Where(s => s.MovieID == movieId)
-                .OrderBy(s => s.SessionDate)
-                .ThenBy(s => s.SessionTime)
-                .ToList();
+            var sessions = from s in Core.Context.Sessions
+                           join m in Core.Context.Movies on s.MovieID equals m.MovieID
+                           join h in Core.Context.Halls on s.HallID equals h.HallID
+                           where s.MovieID == movieId
+                           orderby s.SessionDate, s.SessionTime
+                           select new
+                           {
+                               s.SessionID,
+                               s.SessionDate,
+                               s.SessionTime,
+                               s.Price,
+                               h.HallName,
+                               h.HallRating
+                           };
 
-            listSessions.ItemsSource = sessions;
+            SessionsList.ItemsSource = sessions.ToList();
         }
 
-        private void listSessions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SelectSession_Click(object sender, RoutedEventArgs e)
         {
-            if (listSessions.SelectedItem is Sessions selectedSession)
+            if (MainWindow.CurrentUser == null)
             {
-                if (currentUser == null)
-                {
-                    MessageBox.Show("You need to login to book tickets");
-                    (Application.Current.MainWindow as MainWindow)?.NavigateToLoginWithSession(selectedSession.SessionID);
-                }
-                else
-                {
-                    (Application.Current.MainWindow as MainWindow)?.NavigateToSession(selectedSession.SessionID, currentUser.UserID);
-                }
+                MessageBox.Show("Необходимо войти в систему");
+                NavigationService.Navigate(new LoginPage());
+                return;
             }
+
+            Button btn = sender as Button;
+            int sessionId = (int)btn.Tag;
+            NavigationService.Navigate(new SessionPage(sessionId));
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }
