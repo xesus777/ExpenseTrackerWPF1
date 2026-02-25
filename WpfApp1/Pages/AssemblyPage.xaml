@@ -1,0 +1,83 @@
+﻿<Page x:Class="WpfApp1.Pages.AssemblyPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AssemblyPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левая часть: выбор комплектующих -->
+        <Grid Margin="10" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                <TextBlock Text="Выбор комплектующих" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                <ComboBox x:Name="TypeFilterCombo" Margin="0,0,0,5" SelectionChanged="TypeFilterCombo_SelectionChanged">
+                    <ComboBoxItem IsSelected="True">Все типы</ComboBoxItem>
+                    <ComboBoxItem>CPU</ComboBoxItem>
+                    <ComboBoxItem>GPU</ComboBoxItem>
+                    <ComboBoxItem>Motherboard</ComboBoxItem>
+                    <ComboBoxItem>RAM</ComboBoxItem>
+                    <ComboBoxItem>Case</ComboBoxItem>
+                    <ComboBoxItem>PowerSupply</ComboBoxItem>
+                    <ComboBoxItem>ProcessorCooler</ComboBoxItem>
+                    <ComboBoxItem>StorageDevice</ComboBoxItem>
+                </ComboBox>
+                <TextBox x:Name="SearchBox" TextChanged="SearchBox_TextChanged" Padding="5" Text="Поиск..."/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Производитель:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox x:Name="ManufacturerFilterCombo" Width="150" SelectionChanged="ManufacturerFilterCombo_SelectionChanged"/>
+            </StackPanel>
+
+            <ListView x:Name="PartsListView" Grid.Row="2" SelectionMode="Single" MouseDoubleClick="PartsListView_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Название" DisplayMemberBinding="{Binding name}" Width="150"/>
+                        <GridViewColumn Header="Производитель" DisplayMemberBinding="{Binding manufacturer.name}" Width="100"/>
+                        <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding price}" Width="80"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+        <!-- Правая часть: выбранные компоненты -->
+        <Grid Margin="10" Grid.Column="1" Background="#F0F0F0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Ваша сборка" FontSize="18" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
+
+            <ListBox x:Name="SelectedPartsList" Grid.Row="1" DisplayMemberPath="name" Margin="0,0,0,10"/>
+
+            <StackPanel Grid.Row="2" Margin="0,0,0,10">
+                <TextBlock x:Name="TotalPriceText" Text="Общая цена: 0 руб." FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock x:Name="CompatibilityText" TextWrapping="Wrap" Foreground="Red"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3">
+                <TextBox x:Name="AssemblyNameBox" Margin="0,0,0,5" Padding="5" Text="Название сборки"/>
+                <TextBox x:Name="AuthorNameBox" Margin="0,0,0,5" Padding="5" Text="Автор"/>
+                <Button Content="Сохранить сборку" Padding="5" Click="SaveAssembly_Click"/>
+                <Button Content="Смотреть сохранённые сборки" Margin="0,5,0,0" Padding="5" Click="ViewSavedAssemblies_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
