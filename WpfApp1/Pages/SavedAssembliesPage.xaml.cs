@@ -20,31 +20,94 @@ namespace WpfApp1.Pages
         public SavedAssembliesPage()
         {
             InitializeComponent();
+            LoadAssemblies();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private void LoadAssemblies()
         {
-            var assemblies = Core.Context.assembly_.Include("partassembly").ToList();
-            AssembliesListView.ItemsSource = assemblies;
-        }
-
-        private void AssembliesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var selected = AssembliesListView.SelectedItem as assembly_;
-            if (selected != null)
+            try
             {
-                string details = $"Сборка: {selected.name}\nАвтор: {selected.author}\n\nКомплектующие:\n";
-                foreach (var pa in selected.partassembly_)
+                var assemblies = Core.Context.assembly_.ToList();
+                var assemblyList = new List<AssemblyInfo>();
+
+                foreach (var a in assemblies)
                 {
-                    details += $"- {pa.basepart_.name}\n";
+                    var partAssemblies = Core.Context.partassembly_.Where(p => p.assemblyid == a.id).ToList();
+                    var parts = new List<basepart_>();
+
+                    decimal totalPrice = 0;
+                    foreach (var p in partAssemblies)
+                    {
+                        if (p.basepart_ != null)
+                        {
+                            parts.Add(p.basepart_);
+                            totalPrice += p.basepart_.price;
+                        }
+                    }
+
+                    assemblyList.Add(new AssemblyInfo
+                    {
+                        Id = a.id,
+                        Name = a.name,
+                        Author = a.author,
+                        PartsCount = parts.Count,
+                        TotalPrice = totalPrice,
+                        Parts = parts
+                    });
                 }
-                MessageBox.Show(details);
+
+                AssembliesList.ItemsSource = assemblyList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка загрузки сборок: " + ex.Message);
             }
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void DeleteAssembly_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.GoBack();
+            try
+            {
+                var button = sender as Button;
+                if (button == null) return;
+
+                int assemblyId = (int)button.Tag;
+
+                MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите удалить эту сборку?", "Подтверждение", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    var partAssemblies = Core.Context.partassembly_.Where(p => p.assemblyid == assemblyId).ToList();
+                    foreach (var pa in partAssemblies)
+                    {
+                        Core.Context.partassembly_.Remove(pa);
+                    }
+
+                    var assembly = Core.Context.assembly_.FirstOrDefault(a => a.id == assemblyId);
+                    if (assembly != null)
+                    {
+                        Core.Context.assembly_.Remove(assembly);
+                    }
+
+                    Core.Context.SaveChanges();
+
+                    LoadAssemblies();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при удалении: " + ex.Message);
+            }
         }
+    }
+
+    public class AssemblyInfo
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Author { get; set; }
+        public int PartsCount { get; set; }
+        public decimal TotalPrice { get; set; }
+        public List<basepart_> Parts { get; set; }
     }
 }

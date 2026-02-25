@@ -24,5 +24,15 @@ namespace WpfApp1
             InitializeComponent();
             MainFrame.Navigate(new AssemblyPage());
         }
+
+        private void GoToAssemblyPage(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new AssemblyPage());
+        }
+
+        private void GoToSavedAssembliesPage(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new SavedAssembliesPage());
+        }
     }
 }
