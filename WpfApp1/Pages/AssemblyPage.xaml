@@ -14,7 +14,7 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Левая часть: выбор комплектующих -->
+        
         <Grid Margin="10" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -54,7 +54,7 @@
             </ListView>
         </Grid>
 
-        <!-- Правая часть: выбранные компоненты -->
+        
         <Grid Margin="10" Grid.Column="1" Background="#F0F0F0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
