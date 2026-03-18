@@ -154,7 +154,7 @@ Entity Framework - 6.4.4 - Работа с базой данных
 ---
 
 
-Ссылка на проект [https://github.com/xesus777/ExpenseTrackerWPF1/edit/PR14](https://github.com/xesus777/ExpenseTrackerWPF1/blob/PR14/README.md)
+Ссылка на проект https://github.com/xesus777/ExpenseTrackerWPF1/tree/PR14
 
 Сведения об авторах
 
