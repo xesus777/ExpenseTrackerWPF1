@@ -22,46 +22,108 @@ namespace WpfApp1.Pages
             InitializeComponent();
         }
 
+        // Класс для результата регистрации
+        public class RegistrationResult
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; }
+            public Users NewUser { get; set; }
+        }
+
+        // Метод для тестирования регистрации
+        public RegistrationResult Register(string login, string password, string confirmPassword,
+                                           string email, string fullName)
+        {
+            var result = new RegistrationResult();
+
+            try
+            {
+                // 1. Проверка на пустые поля
+                if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+                {
+                    result.Success = false;
+                    result.Message = "Заполните логин и пароль";
+                    return result;
+                }
+
+                // 2. Проверка совпадения паролей
+                if (password != confirmPassword)
+                {
+                    result.Success = false;
+                    result.Message = "Пароли не совпадают";
+                    return result;
+                }
+
+                // 3. Проверка длины пароля (не менее 6 символов)
+                if (password.Length < 6)
+                {
+                    result.Success = false;
+                    result.Message = "Пароль должен быть не менее 6 символов";
+                    return result;
+                }
+
+                // 4. Проверка длины логина (не менее 3 символов)
+                if (login.Length < 3)
+                {
+                    result.Success = false;
+                    result.Message = "Логин должен быть не менее 3 символов";
+                    return result;
+                }
+
+                // 5. Проверка на существующего пользователя
+                if (Core.Context.Users.Any(u => u.Username == login))
+                {
+                    result.Success = false;
+                    result.Message = "Пользователь с таким логином уже существует";
+                    return result;
+                }
+
+                // Создание нового пользователя
+                Users newUser = new Users
+                {
+                    Username = login,
+                    Password = password,
+                    Email = email,
+                    FullName = fullName,
+                    RegistrationDate = DateTime.Now
+                };
+
+                Core.Context.Users.Add(newUser);
+                Core.Context.SaveChanges();
+
+                result.Success = true;
+                result.Message = "Регистрация успешна";
+                result.NewUser = newUser;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Ошибка при сохранении: {ex.Message}";
+            }
+
+            return result;
+        }
+
+        // Обновленный обработчик кнопки регистрации
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            string login = LoginBox.Text;
-            string password = PasswordBox.Password;
-            string confirmPassword = ConfirmPasswordBox.Password;
-            string email = EmailBox.Text;
-            string fullName = FullNameBox.Text;
+            var result = Register(
+                LoginBox.Text,
+                PasswordBox.Password,
+                ConfirmPasswordBox.Password,
+                EmailBox.Text,
+                FullNameBox.Text
+            );
 
-            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            if (result.Success)
             {
-                MessageText.Text = "Заполните логин и пароль";
-                return;
+                MessageBox.Show(result.Message);
+                NavigationService.Navigate(new LoginPage());
             }
-
-            if (password != confirmPassword)
+            else
             {
-                MessageText.Text = "Пароли не совпадают";
-                return;
+                MessageText.Text = result.Message;
             }
-
-            if (Core.Context.Users.Any(u => u.Username == login))
-            {
-                MessageText.Text = "Пользователь с таким логином уже существует";
-                return;
-            }
-
-            Users newUser = new Users
-            {
-                Username = login,
-                Password = password,
-                Email = email,
-                FullName = fullName,
-                RegistrationDate = DateTime.Now
-            };
-
-            Core.Context.Users.Add(newUser);
-            Core.Context.SaveChanges();
-
-            MessageBox.Show("Регистрация успешна! Теперь войдите в систему.");
-            NavigationService.Navigate(new LoginPage());
         }
 
         private void ToLoginPage_Click(object sender, RoutedEventArgs e)

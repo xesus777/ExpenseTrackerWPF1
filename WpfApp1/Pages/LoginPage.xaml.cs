@@ -22,15 +22,41 @@ namespace WpfApp1.Pages
             InitializeComponent();
         }
 
+
+        public bool Auth(string login, string password)
+        {
+            // 1. Проверка на null
+            if (login == null || password == null)
+                return false;
+
+            // 2. Проверка на пустые строки и строки из пробелов
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+                return false;
+
+            // 3. Проверка на очень длинные строки (больше 50 символов)
+            if (login.Length > 50 || password.Length > 50)
+                return false;
+
+            
+
+            // 4. Поиск пользователя в БД
+            var user = Core.Context.Users
+                .FirstOrDefault(u => u.Username == login && u.Password == password);
+
+            
+
+            // Возвращаем true только если пользователь найден
+            return user != null;
+        }
+
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             string login = LoginBox.Text;
             string password = PasswordBox.Password;
 
-            var user = Core.Context.Users.FirstOrDefault(u => u.Username == login && u.Password == password);
-
-            if (user != null)
+            if (Auth(login, password))
             {
+                var user = Core.Context.Users.FirstOrDefault(u => u.Username == login && u.Password == password);
                 MainWindow.CurrentUser = user;
                 NavigationService.Navigate(new MainPage());
             }
