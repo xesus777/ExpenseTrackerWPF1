@@ -69,6 +69,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Enemy.cs" />
+    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -93,6 +96,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\chest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Пестов С--.png" />
+    <Resource Include="Images\ВВГ.png" />
+    <Resource Include="Images\Гоблин.png" />
+    <Resource Include="Images\Ковальский.png" />
+    <Resource Include="Images\Скелет.png" />
+    <Resource Include="Images\Архимаг С++.png" />
+    <Resource Include="Images\Маг.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
