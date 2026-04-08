@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" Padding="5">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnProducts" Content="Товары" Width="80" Margin="5" Click="BtnProducts_Click"/>
+                <Button x:Name="BtnCart" Content="Корзина" Width="80" Margin="5" Click="BtnCart_Click" Visibility="Collapsed"/>
+                <Button x:Name="BtnLogin" Content="Вход" Width="80" Margin="5" Click="BtnLogin_Click"/>
+                <Button x:Name="BtnAccount" Content="Аккаунт" Width="80" Margin="5" Click="BtnAccount_Click" Visibility="Collapsed"/>
+                <Button x:Name="BtnLogout" Content="Выход" Width="80" Margin="5" Click="BtnLogout_Click" Visibility="Collapsed"/>
+            </StackPanel>
+        </Border>
+
+        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>
