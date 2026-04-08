@@ -14,7 +14,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Косметическая лажа" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <TextBlock Text="Косметическую лажа" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
         <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Padding="10">
             <Grid>
@@ -25,13 +25,13 @@
 
                 <TextBlock Text="Наши мастера и услуги" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
 
-                <ListView x:Name="LvMastersServices" Grid.Row="1" SelectionChanged="LvMastersServices_SelectionChanged">
+                <ListView x:Name="LvMastersServices" Grid.Row="1">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Мастер" Width="Auto" DisplayMemberBinding="{Binding MasterName}"/>
-                            <GridViewColumn Header="Услуги" Width="Auto" DisplayMemberBinding="{Binding ServicesList}"/>
-                            <GridViewColumn Header="Цена" Width="Auto" DisplayMemberBinding="{Binding PricesList}"/>
-                            <GridViewColumn Header="Длительность" Width="Auto" DisplayMemberBinding="{Binding DurationList}"/>
+                            <GridViewColumn Header="Мастер" Width="200" DisplayMemberBinding="{Binding MasterName}"/>
+                            <GridViewColumn Header="Услуги" Width="300" DisplayMemberBinding="{Binding ServicesList}"/>
+                            <GridViewColumn Header="Цена" Width="150" DisplayMemberBinding="{Binding PricesList}"/>
+                            <GridViewColumn Header="Длительность" Width="100" DisplayMemberBinding="{Binding DurationList}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

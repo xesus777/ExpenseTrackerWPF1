@@ -14,6 +14,7 @@
 
         <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="0,0,0,1" Padding="5">
             <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnServices" Content="Услуги" Width="80" Margin="5" Click="BtnServices_Click"/>
                 <Button x:Name="BtnProducts" Content="Товары" Width="80" Margin="5" Click="BtnProducts_Click"/>
                 <Button x:Name="BtnCart" Content="Корзина" Width="80" Margin="5" Click="BtnCart_Click" Visibility="Collapsed"/>
                 <Button x:Name="BtnLogin" Content="Вход" Width="80" Margin="5" Click="BtnLogin_Click"/>
