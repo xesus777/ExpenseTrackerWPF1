@@ -40,10 +40,8 @@ namespace WpfApp1
             BtnAccount.Visibility = isAuth ? Visibility.Visible : Visibility.Collapsed;
             BtnLogout.Visibility = isAuth ? Visibility.Visible : Visibility.Collapsed;
 
-            // Корзина только для клиентов
             BtnCart.Visibility = isClient ? Visibility.Visible : Visibility.Collapsed;
 
-            // Услуги и товары видны всем
             BtnServices.Visibility = Visibility.Visible;
             BtnProducts.Visibility = Visibility.Visible;
 

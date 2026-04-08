@@ -89,6 +89,9 @@
     <Compile Include="Orders.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Pages\AppointmentBookingPage.xaml.cs">
+      <DependentUpon>AppointmentBookingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\AppointmentsCatalogPage.xaml.cs">
       <DependentUpon>AppointmentsCatalogPage.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\AppointmentBookingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\AppointmentsCatalogPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
