@@ -18,7 +18,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Background="LightGray" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Background="LightGray" Orientation="Horizontal" >
             <TextBlock x:Name="FloorText" Text="Этаж: 1" Width="100"/>
             <TextBlock Text="Здоровье: "/>
             <ProgressBar x:Name="HealthBar" Width="200" Height="20" Minimum="0" Maximum="100" Value="100"/>
@@ -33,16 +33,50 @@
                 </StackPanel>
 
                 <StackPanel x:Name="GamePanel" Visibility="Collapsed" VerticalAlignment="Center">
+
                     <StackPanel x:Name="CombatPanel" Visibility="Collapsed">
-                        <Image x:Name="EnemyImage" Width="100" Height="100" Margin="5"/>
-                        <TextBlock x:Name="EnemyNameText" FontSize="16" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="EnemyHealthText" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="EnemyAbilityText" HorizontalAlignment="Center" Foreground="Gray"/>
-                        <TextBlock x:Name="EnemyCountText" HorizontalAlignment="Center" Foreground="Red"/>
+                        <TextBlock Text="ВРАГИ" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                            <Button x:Name="AttackButton" Content="Атака" Width="80" Click="AttackButton_Click" Margin="2"/>
-                            <Button x:Name="DefendButton" Content="Защита" Width="80" Click="DefendButton_Click" Margin="2"/>
+                            <Border x:Name="Enemy1Border" BorderBrush="Black" BorderThickness="1" Margin="5" Padding="5" Width="150">
+                                <StackPanel>
+                                    <Image x:Name="Enemy1Image" Width="100" Height="100" Margin="5"/>
+                                    <TextBlock x:Name="Enemy1Name" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <ProgressBar x:Name="Enemy1HealthBar" Height="15" Margin="2"/>
+                                    <TextBlock x:Name="Enemy1HealthText" HorizontalAlignment="Center" FontSize="11"/>
+                                    <TextBlock x:Name="Enemy1Ability" HorizontalAlignment="Center" FontSize="10" Foreground="Gray"/>
+                                    <Button x:Name="AttackEnemy1Button" Content="Атаковать" Width="80" Height="25" 
+                        Click="AttackEnemy1Button_Click" Margin="2"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="Enemy2Border" BorderBrush="Black" BorderThickness="1" Margin="5" Padding="5" Width="150">
+                                <StackPanel>
+                                    <Image x:Name="Enemy2Image" Width="100" Height="100" Margin="5"/>
+                                    <TextBlock x:Name="Enemy2Name" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <ProgressBar x:Name="Enemy2HealthBar" Height="15" Margin="2"/>
+                                    <TextBlock x:Name="Enemy2HealthText" HorizontalAlignment="Center" FontSize="11"/>
+                                    <TextBlock x:Name="Enemy2Ability" HorizontalAlignment="Center" FontSize="10" Foreground="Gray"/>
+                                    <Button x:Name="AttackEnemy2Button" Content="Атаковать" Width="80" Height="25" 
+                        Click="AttackEnemy2Button_Click" Margin="2"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="Enemy3Border" BorderBrush="Black" BorderThickness="1" Margin="5" Padding="5" Width="150">
+                                <StackPanel>
+                                    <Image x:Name="Enemy3Image" Width="100" Height="100" Margin="5"/>
+                                    <TextBlock x:Name="Enemy3Name" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <ProgressBar x:Name="Enemy3HealthBar" Height="15" Margin="2"/>
+                                    <TextBlock x:Name="Enemy3HealthText" HorizontalAlignment="Center" FontSize="11"/>
+                                    <TextBlock x:Name="Enemy3Ability" HorizontalAlignment="Center" FontSize="10" Foreground="Gray"/>
+                                    <Button x:Name="AttackEnemy3Button" Content="Атаковать" Width="80" Height="25" 
+                        Click="AttackEnemy3Button_Click" Margin="2"/>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
+
+                        <Button x:Name="DefendButton" Content="ЗАЩИТА" Width="100" Height="30" 
+            Click="DefendButton_Click" Margin="5" HorizontalAlignment="Center"/>
                     </StackPanel>
 
                     <StackPanel x:Name="ChestPanel" Visibility="Collapsed">
@@ -68,14 +102,13 @@
         <StackPanel Grid.Row="2" Grid.Column="0" Background="LightGray" Margin="5">
             <TextBlock Text="Инвентарь" FontWeight="Bold" HorizontalAlignment="Center"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Border BorderBrush="Black" BorderThickness="1" Width="100" Height="60" Margin="2">
+                <Border BorderBrush="Black" BorderThickness="1" Width="150" Height="100" Margin="2">
                     <TextBlock x:Name="WeaponText" Text="Нет оружия" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-                <Border BorderBrush="Black" BorderThickness="1" Width="100" Height="60" Margin="2">
+                <Border BorderBrush="Black" BorderThickness="1" Width="150" Height="100" Margin="2">
                     <TextBlock x:Name="ArmorText" Text="Нет брони" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </StackPanel>
-            <TextBlock Text="Место, где показываются вещи игрока" HorizontalAlignment="Center" TextWrapping="Wrap"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Grid.Column="1" Background="LightGray" Margin="5">

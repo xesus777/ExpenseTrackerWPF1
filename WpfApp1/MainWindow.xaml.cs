@@ -100,8 +100,17 @@ namespace WpfApp1
 
             _isPlayerTurn = true;
             _isDefending = false;
-            AddEvent($"Появилось {enemyCount} врагов!");
+
+            string enemyWord = GetEnemyWord(enemyCount);
+            AddEvent($"Появилось {enemyCount} {enemyWord}!");
             UpdateCombatUI();
+        }
+
+        private string GetEnemyWord(int count)
+        {
+            if (count == 1) return "враг";
+            if (count == 2) return "врага";
+            return "врагов";
         }
 
         private void GenerateBoss()
@@ -112,6 +121,7 @@ namespace WpfApp1
 
             _isPlayerTurn = true;
             _isDefending = false;
+
             AddEvent($" БОСС: {boss.Name}");
             UpdateCombatUI();
         }
@@ -133,8 +143,7 @@ namespace WpfApp1
             else
                 return new Mage();
         }
-
-        private Enemy CreateRandomBoss()
+    private Enemy CreateRandomBoss()
         {
             int type = _random.Next(4);
             if (type == 0)
@@ -170,11 +179,26 @@ namespace WpfApp1
             return names[_random.Next(names.Length)];
         }
 
-        private void AttackButton_Click(object sender, RoutedEventArgs e)
+        private void AttackEnemy1Button_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentEnemies == null || _currentEnemies.Count == 0 || !_isPlayerTurn)
-                return;
+            if (_currentEnemies.Count < 1 || !_isPlayerTurn) return;
+            AttackEnemy(0);
+        }
 
+        private void AttackEnemy2Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentEnemies.Count < 2 || !_isPlayerTurn) return;
+            AttackEnemy(1);
+        }
+
+        private void AttackEnemy3Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentEnemies.Count < 3 || !_isPlayerTurn) return;
+            AttackEnemy(2);
+        }
+
+        private void AttackEnemy(int index)
+        {
             _isPlayerTurn = false;
             _isDefending = false;
 
@@ -186,15 +210,15 @@ namespace WpfApp1
                 return;
             }
 
-            var enemy = _currentEnemies[0];
+            Enemy target = _currentEnemies[index];
             int damage = _player.GetAttackPower();
-            enemy.Health -= damage;
-            AddEvent($" Вы атаковали {enemy.Name} и нанесли {damage} урона");
+            target.Health -= damage;
+            AddEvent($" Вы атаковали {target.Name} и нанесли {damage} урона");
 
-            if (enemy.IsDead)
+            if (target.IsDead)
             {
-                _currentEnemies.Remove(enemy);
-                AddEvent($" {enemy.Name} повержен!");
+                _currentEnemies.RemoveAt(index);
+                AddEvent($" {target.Name} повержен!");
             }
 
             ProcessEnemyTurn();
@@ -217,7 +241,6 @@ namespace WpfApp1
             }
 
             AddEvent(" Вы встали в защитную стойку");
-
             ProcessEnemyTurn();
         }
 
@@ -228,8 +251,6 @@ namespace WpfApp1
             foreach (var enemy in enemiesCopy)
             {
                 if (_player.IsDead) break;
-
-                bool isFrozen = _player.IsFrozen;
 
                 int enemyDamage = enemy.CalculateDamage(_player.GetDefense(), _isDefending);
 
@@ -262,13 +283,15 @@ namespace WpfApp1
                     }
                 }
 
-                if (enemy is Mage || enemy is Pestov)
+                if (enemy is Mage && _random.Next(100) < 15)
                 {
-                    if (_random.Next(100) < (enemy is Pestov ? 30 : 15))
-                    {
-                        _player.IsFrozen = true;
-                        AddEvent($" {enemy.Name} заморозил вас!");
-                    }
+                    _player.IsFrozen = true;
+                    AddEvent($" {enemy.Name} заморозил вас!");
+                }
+                if (enemy is Pestov && _random.Next(100) < 30)
+                {
+                    _player.IsFrozen = true;
+                    AddEvent($" {enemy.Name} заморозил вас!");
                 }
             }
 
@@ -321,7 +344,7 @@ namespace WpfApp1
 
         private void GameOver()
         {
-            AddEvent("ВЫ ПОГИБЛИ!");
+            AddEvent(" ВЫ ПОГИБЛИ!");
             GamePanel.Visibility = Visibility.Collapsed;
             GameOverPanel.Visibility = Visibility.Visible;
         }
@@ -339,31 +362,63 @@ namespace WpfApp1
 
         private void UpdateCombatUI()
         {
-            if (_currentEnemies.Count > 0)
+            Enemy1Border.Visibility = Visibility.Collapsed;
+            Enemy2Border.Visibility = Visibility.Collapsed;
+            Enemy3Border.Visibility = Visibility.Collapsed;
+
+            for (int i = 0; i < _currentEnemies.Count; i++)
             {
-                var enemy = _currentEnemies[0];
-                EnemyNameText.Text = enemy.Name;
-                EnemyHealthText.Text = $" {enemy.Health}/{enemy.MaxHealth}";
-                EnemyAbilityText.Text = enemy.GetSpecialAbilityDescription();
+                Enemy enemy = _currentEnemies[i];
 
-                if (_currentEnemies.Count > 1)
+                switch (i)
                 {
-                    EnemyCountText.Text = $"и еще {_currentEnemies.Count - 1} враг(ов)";
-                }
-                else
-                {
-                    EnemyCountText.Text = "";
-                }
+                    case 0:
+                        Enemy1Border.Visibility = Visibility.Visible;
+                        Enemy1Name.Text = enemy.Name;
+                        Enemy1HealthBar.Maximum = enemy.MaxHealth;
+                        Enemy1HealthBar.Value = enemy.Health;
+                        Enemy1HealthText.Text = $"{enemy.Health}/{enemy.MaxHealth}";
+                        Enemy1Ability.Text = enemy.GetSpecialAbilityDescription();
 
-                
-                try
-                {
-                    string imagePath = $"Images/{enemy.Name}.png";
-                    EnemyImage.Source = new BitmapImage(new Uri(imagePath, UriKind.Relative));
-                }
-                catch
-                {
-                    EnemyImage.Source = null;
+                        try
+                        {
+                            string imagePath = $"Images/{enemy.Name}.png";
+                            Enemy1Image.Source = new BitmapImage(new Uri(imagePath, UriKind.Relative));
+                        }
+                        catch { Enemy1Image.Source = null; }
+                        break;
+
+                    case 1:
+                        Enemy2Border.Visibility = Visibility.Visible;
+                        Enemy2Name.Text = enemy.Name;
+                        Enemy2HealthBar.Maximum = enemy.MaxHealth;
+                        Enemy2HealthBar.Value = enemy.Health;
+                        Enemy2HealthText.Text = $"{enemy.Health}/{enemy.MaxHealth}";
+                        Enemy2Ability.Text = enemy.GetSpecialAbilityDescription();
+
+                        try
+                        {
+                            string imagePath = $"Images/{enemy.Name}.png";
+                            Enemy2Image.Source = new BitmapImage(new Uri(imagePath, UriKind.Relative));
+                        }
+                        catch { Enemy2Image.Source = null; }
+                        break;
+
+                    case 2:
+                        Enemy3Border.Visibility = Visibility.Visible;
+                        Enemy3Name.Text = enemy.Name;
+                        Enemy3HealthBar.Maximum = enemy.MaxHealth;
+                        Enemy3HealthBar.Value = enemy.Health;
+                        Enemy3HealthText.Text = $"{enemy.Health}/{enemy.MaxHealth}";
+                        Enemy3Ability.Text = enemy.GetSpecialAbilityDescription();
+
+                        try
+                        {
+                            string imagePath = $"Images/{enemy.Name}.png";
+                            Enemy3Image.Source = new BitmapImage(new Uri(imagePath, UriKind.Relative));
+                        }
+                        catch { Enemy3Image.Source = null; }
+                        break;
                 }
             }
         }
