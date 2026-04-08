@@ -14,24 +14,31 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Косметическую лажа" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <TextBlock Text="Добро пожаловать в Косметическую ложу!" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
         <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="Наши мастера и услуги" FontWeight="Bold" FontSize="14" Margin="0,0,0,10"/>
 
-                <ListView x:Name="LvMastersServices" Grid.Row="1">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Выберите дату:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <DatePicker x:Name="DatePickerSlots" SelectedDateChanged="DatePickerSlots_SelectedDateChanged" Width="150"/>
+                </StackPanel>
+
+                <ListView x:Name="LvMastersServices" Grid.Row="2" IsHitTestVisible="False">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Мастер" Width="200" DisplayMemberBinding="{Binding MasterName}"/>
-                            <GridViewColumn Header="Услуги" Width="300" DisplayMemberBinding="{Binding ServicesList}"/>
-                            <GridViewColumn Header="Цена" Width="150" DisplayMemberBinding="{Binding PricesList}"/>
-                            <GridViewColumn Header="Длительность" Width="100" DisplayMemberBinding="{Binding DurationList}"/>
+                            <GridViewColumn Header="Мастер" Width="Auto" DisplayMemberBinding="{Binding MasterName}"/>
+                            <GridViewColumn Header="Услуги" Width="Auto" DisplayMemberBinding="{Binding ServicesList}"/>
+                            <GridViewColumn Header="Цена" Width="Auto" DisplayMemberBinding="{Binding PricesList}"/>
+                            <GridViewColumn Header="Длительность" Width="Auto" DisplayMemberBinding="{Binding DurationList}"/>
+                            <GridViewColumn Header="Доступные записи" Width="250" DisplayMemberBinding="{Binding AvailableSlots}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

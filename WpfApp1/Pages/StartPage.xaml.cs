@@ -20,6 +20,7 @@ namespace WpfApp1.Pages
         public StartPage()
         {
             InitializeComponent();
+            DatePickerSlots.SelectedDate = DateTime.Now.Date;
             LoadMastersServices();
         }
 
@@ -36,7 +37,7 @@ namespace WpfApp1.Pages
                 var services = (from ms in Core.Context.MasterServices
                                 join st in Core.Context.ServiceTypes on ms.ServiceTypeId equals st.Id
                                 where ms.MasterId == master.Id
-                                select new { st.Name, st.Price, st.Duration }).ToList();
+                                select new { st.Id, st.Name, st.Price, st.Duration }).ToList();
 
                 if (services.Any())
                 {
@@ -46,12 +47,42 @@ namespace WpfApp1.Pages
                         MasterName = master.FullName,
                         ServicesList = string.Join(", ", services.Select(s => s.Name)),
                         PricesList = string.Join(", ", services.Select(s => $"{s.Price} руб")),
-                        DurationList = string.Join(", ", services.Select(s => $"{s.Duration} мин"))
+                        DurationList = string.Join(", ", services.Select(s => $"{s.Duration} мин")),
+                        AvailableSlots = GetAvailableSlotsForMaster(master.Id, DatePickerSlots.SelectedDate ?? DateTime.Now.Date)
                     });
                 }
             }
 
             LvMastersServices.ItemsSource = masterServicesList;
+        }
+
+        private string GetAvailableSlotsForMaster(int masterId, DateTime date)
+        {
+            var existingAppointments = Core.Context.Appointments
+                .Where(a => a.MasterId == masterId && a.Status != "Cancelled")
+                .Select(a => a.AppointmentDateTime)
+                .ToList();
+
+            var freeSlots = new List<string>();
+
+            for (int hour = 10; hour <= 18; hour++)
+            {
+                var slotTime = date.Date.AddHours(hour);
+                if (!existingAppointments.Contains(slotTime) && slotTime > DateTime.Now)
+                {
+                    freeSlots.Add($"{hour}:00");
+                }
+            }
+
+            if (!freeSlots.Any())
+                return "Нет свободных записей";
+
+            return string.Join(", ", freeSlots);
+        }
+
+        private void DatePickerSlots_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            LoadMastersServices();
         }
     }
 
@@ -62,5 +93,6 @@ namespace WpfApp1.Pages
         public string ServicesList { get; set; }
         public string PricesList { get; set; }
         public string DurationList { get; set; }
+        public string AvailableSlots { get; set; }
     }
 }
