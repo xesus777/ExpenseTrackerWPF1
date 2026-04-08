@@ -1,0 +1,151 @@
+﻿<Page x:Class="WpfApp1.Pages.ManagerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ManagerPage">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Button Content="Назад" Width="60" Click="Back_Click" HorizontalAlignment="Left"/>
+            <TextBlock Text="Панель менеджера" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <TabControl Grid.Row="1" Margin="0,10">
+            <TabItem Header="Записи">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Создать запись" Width="100" Click="CreateAppointment_Click"/>
+                        <TextBox x:Name="TxtSearchClient" Width="150" Margin="10,0" TextChanged="TxtSearchClient_TextChanged"/>
+                    </StackPanel>
+                    <ListView x:Name="LvAppointments" Grid.Row="1" SelectionChanged="LvAppointments_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Дата" Width="120" DisplayMemberBinding="{Binding AppointmentDateTime}"/>
+                                <GridViewColumn Header="Клиент" Width="150" DisplayMemberBinding="{Binding ClientName}"/>
+                                <GridViewColumn Header="Мастер" Width="150" DisplayMemberBinding="{Binding MasterName}"/>
+                                <GridViewColumn Header="Услуга" Width="150" DisplayMemberBinding="{Binding ServiceName}"/>
+                                <GridViewColumn Header="Статус" Width="100" DisplayMemberBinding="{Binding Status}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Заказы">
+                <Grid Margin="10">
+                    <ListView x:Name="LvOrders" SelectionChanged="LvOrders_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="№" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Клиент" Width="150" DisplayMemberBinding="{Binding ClientName}"/>
+                                <GridViewColumn Header="Дата заказа" Width="100" DisplayMemberBinding="{Binding OrderDate}"/>
+                                <GridViewColumn Header="Дата доставки" Width="100" DisplayMemberBinding="{Binding DeliveryDate}"/>
+                                <GridViewColumn Header="Сумма" Width="80" DisplayMemberBinding="{Binding TotalAmount}"/>
+                                <GridViewColumn Header="Статус" Width="100" DisplayMemberBinding="{Binding Status}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Товары">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Добавить товар" Width="Auto" Click="AddProduct_Click"/>
+                    </StackPanel>
+                    <ListView x:Name="LvProducts" Grid.Row="1" SelectionChanged="LvProducts_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Название" Width="150" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price}"/>
+                                <GridViewColumn Header="Скидка" Width="60" DisplayMemberBinding="{Binding Discount}"/>
+                                <GridViewColumn Header="Производитель" Width="100" DisplayMemberBinding="{Binding ManufacturerName}"/>
+                                <GridViewColumn Header="Тип" Width="100" DisplayMemberBinding="{Binding ProductTypeName}"/>
+                                <GridViewColumn Header="Статус" Width="80" DisplayMemberBinding="{Binding IsFrozen}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Производители">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Grid.Row="0" Content="Добавить производителя" Width="Auto"  Click="AddManufacturer_Click" />
+                    </StackPanel>
+                    <ListView x:Name="LvManufacturers" Grid.Row="1" SelectionChanged="LvManufacturers_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Название" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Типы товаров">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Grid.Row="0" Content="Добавить тип товара" Width="Auto"  Click="AddProductType_Click" />
+                    </StackPanel>
+                    <ListView x:Name="LvProductTypes" Grid.Row="1" SelectionChanged="LvProductTypes_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Название" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Типы услуг">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Grid.Row="0" Content="Добавить тип услуги" Width="Auto"  Click="AddServiceType_Click" />
+                    </StackPanel>
+                    <ListView x:Name="LvServiceTypes" Grid.Row="1" SelectionChanged="LvServiceTypes_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Название" Width="150" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price}"/>
+                                <GridViewColumn Header="Длительность" Width="80" DisplayMemberBinding="{Binding Duration}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>
