@@ -1,0 +1,53 @@
+﻿<Page x:Class="WpfApp1.Pages.AppointmentDetailsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AppointmentDetailsPage">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Назад" Width="60" Margin="0,0,0,20" Click="Back_Click" HorizontalAlignment="Left"/>
+
+        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Padding="20" 
+            HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+            <StackPanel>
+                <TextBlock Text="Детали записи" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,10">
+                    <StackPanel>
+                        <TextBlock Text="Дата и время:" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtDateTime" Margin="0,5"/>
+
+                        <TextBlock Text="Клиент:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="TxtClientName" Margin="0,5"/>
+
+                        <TextBlock Text="Телефон:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="TxtClientPhone" Margin="0,5"/>
+
+                        <TextBlock Text="Услуга:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="TxtService" Margin="0,5"/>
+
+                        <TextBlock Text="Цена:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="TxtPrice" Margin="0,5"/>
+
+                        <TextBlock Text="Комментарий:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="TxtComment" Margin="0,5" TextWrapping="Wrap"/>
+
+                        <TextBlock Text="Статус:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="TxtStatus" Margin="0,5"/>
+                    </StackPanel>
+                </Border>
+
+                <Button x:Name="BtnComplete" Content="Завершить запись" Height="35" Margin="0,15" Click="Complete_Click" Visibility="Collapsed"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>
