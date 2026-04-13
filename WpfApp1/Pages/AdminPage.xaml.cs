@@ -86,7 +86,7 @@ namespace WpfApp1.Pages
                     roleCombo.SelectedValue = user.RoleId;
                     stackPanel.Children.Add(roleCombo);
 
-                    // Информация о статусе
+                    
                     var statusText = new TextBlock
                     {
                         Text = user.IsFrozen == true ? "Статус: ЗАМОРОЖЕН" : "Статус: АКТИВЕН",
