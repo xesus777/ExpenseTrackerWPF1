@@ -67,15 +67,15 @@ namespace WpfApp1.Pages
                 var price = selected.GetType().GetProperty("Price")?.GetValue(selected);
                 var status = selected.GetType().GetProperty("Status")?.GetValue(selected);
 
-                MessageBox.Show($"═══════════════════════════════\n" +
+                MessageBox.Show($"-------------------------------\n" +
                                 $"ЗАПИСЬ НА УСЛУГУ\n" +
-                                $"═══════════════════════════════\n" +
+                                $"-------------------------------\n" +
                                 $"Дата и время: {appointmentDateTime:dd.MM.yyyy HH:mm}\n" +
                                 $"Услуга: {serviceName}\n" +
                                 $"Мастер: {masterName}\n" +
                                 $"Цена: {price} руб\n" +
                                 $"Статус: {GetAppointmentStatusText(status?.ToString())}\n" +
-                                $"═══════════════════════════════",
+                                $"-------------------------------",
                                 "Детали записи",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
@@ -103,18 +103,18 @@ namespace WpfApp1.Pages
 
                 var itemsList = string.Join("\n", items.Select(i => $"{i.Name} x {i.Quantity} = {i.Total} руб"));
 
-                MessageBox.Show($"═══════════════════════════════\n" +
+                MessageBox.Show($"-------------------------------\n" +
                                 $"ЗАКАЗ №{order.Id}\n" +
-                                $"═══════════════════════════════\n" +
+                                $"-------------------------------\n" +
                                 $"Дата заказа: {order.OrderDate:dd.MM.yyyy}\n" +
                                 $"Дата доставки: {order.DeliveryDate:dd.MM.yyyy}\n" +
                                 $"Способ оплаты: {order.PaymentMethod ?? "Не указан"}\n" +
                                 $"Статус: {GetOrderStatusText(order.Status)}\n" +
-                                $"───────────────────────────────\n" +
+                                $"-------------------------------\n" +
                                 $"Товары:\n{itemsList}\n" +
-                                $"───────────────────────────────\n" +
+                                $"-------------------------------\n" +
                                 $"ИТОГО: {order.TotalAmount} руб\n" +
-                                $"═══════════════════════════════",
+                                $"-------------------------------\n",
                                 $"Заказ №{order.Id}",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);

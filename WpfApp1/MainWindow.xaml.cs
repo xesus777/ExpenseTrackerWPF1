@@ -47,7 +47,7 @@ namespace WpfApp1
 
             if (isAuth)
             {
-                BtnAccount.Content = $"Аккаунт ({CurrentUserName})";
+                BtnAccount.Content = $"{CurrentUserName}";
             }
         }
 

@@ -125,7 +125,7 @@ namespace WpfApp1.Pages
         {
             if (MainWindow.CurrentUserId == 0)
             {
-                var result = MessageBox.Show("Для добавления в корзину необходимо авторизоваться. Перейти на страницу входа?",
+                var result = MessageBox.Show("Для добавления в корзину необходимо авторизоваться. Перейти на страницу входа fa?",
                     "Требуется авторизация", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
