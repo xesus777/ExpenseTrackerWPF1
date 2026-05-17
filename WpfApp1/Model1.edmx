@@ -22,6 +22,7 @@
           </Key>
           <Property Name="BookID" Type="int" Nullable="false" />
           <Property Name="GenreID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" />
         </EntityType>
         <EntityType Name="Books">
           <Key>
@@ -372,6 +373,17 @@
           <Property Name="IsApproved" Type="Boolean" />
           <NavigationProperty Name="Users" Relationship="Self.FK__AuthorRol__UserI__4E88ABD4" FromRole="AuthorRoleRequests" ToRole="Users" />
         </EntityType>
+        <EntityType Name="BookGenres">
+          <Key>
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="GenreID" />
+          </Key>
+          <Property Name="BookID" Type="Int32" Nullable="false" />
+          <Property Name="GenreID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Books" Relationship="Self.FK__BookGenre__BookI__35BCFE0A" FromRole="BookGenres" ToRole="Books" />
+          <NavigationProperty Name="Genres" Relationship="Self.FK__BookGenre__Genre__36B12243" FromRole="BookGenres" ToRole="Genres" />
+        </EntityType>
         <EntityType Name="Books">
           <Key>
             <PropertyRef Name="BookID" />
@@ -384,12 +396,12 @@
           <Property Name="AuthorID" Type="Int32" Nullable="false" />
           <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="BookGenres" Relationship="Self.FK__BookGenre__BookI__35BCFE0A" FromRole="Books" ToRole="BookGenres" />
           <NavigationProperty Name="Users" Relationship="Self.FK__Books__AuthorID__32E0915F" FromRole="Books" ToRole="Users" />
           <NavigationProperty Name="Complaints" Relationship="Self.FK__Complaint__BookI__47DBAE45" FromRole="Books" ToRole="Complaints" />
           <NavigationProperty Name="ReadingLists" Relationship="Self.FK__ReadingLi__BookI__4222D4EF" FromRole="Books" ToRole="ReadingLists" />
           <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__BookID__3B75D760" FromRole="Books" ToRole="Reviews" />
           <NavigationProperty Name="UnfreezeRequests" Relationship="Self.FK__UnfreezeR__BookI__5441852A" FromRole="Books" ToRole="UnfreezeRequests" />
-          <NavigationProperty Name="Genres" Relationship="Self.BookGenres" FromRole="Books" ToRole="Genres" />
         </EntityType>
         <EntityType Name="Complaints">
           <Key>
@@ -412,7 +424,7 @@
           <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GenreName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Books" Relationship="Self.BookGenres" FromRole="Genres" ToRole="Books" />
+          <NavigationProperty Name="BookGenres" Relationship="Self.FK__BookGenre__Genre__36B12243" FromRole="Genres" ToRole="BookGenres" />
         </EntityType>
         <EntityType Name="ReadingLists">
           <Key>
@@ -502,6 +514,30 @@
             </Principal>
             <Dependent Role="AuthorRoleRequests">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BookGenre__BookI__35BCFE0A">
+          <End Role="Books" Type="Self.Books" Multiplicity="1" />
+          <End Role="BookGenres" Type="Self.BookGenres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Books">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="BookGenres">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BookGenre__Genre__36B12243">
+          <End Role="Genres" Type="Self.Genres" Multiplicity="1" />
+          <End Role="BookGenres" Type="Self.BookGenres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genres">
+              <PropertyRef Name="GenreID" />
+            </Principal>
+            <Dependent Role="BookGenres">
+              <PropertyRef Name="GenreID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -637,12 +673,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="BookGenres">
-          <End Role="Books" Type="Self.Books" Multiplicity="*" />
-          <End Role="Genres" Type="Self.Genres" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="BookPlatformEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AuthorRoleRequests" EntityType="Self.AuthorRoleRequests" />
+          <EntitySet Name="BookGenres" EntityType="Self.BookGenres" />
           <EntitySet Name="Books" EntityType="Self.Books" />
           <EntitySet Name="Complaints" EntityType="Self.Complaints" />
           <EntitySet Name="Genres" EntityType="Self.Genres" />
@@ -655,6 +688,14 @@
           <AssociationSet Name="FK__AuthorRol__UserI__4E88ABD4" Association="Self.FK__AuthorRol__UserI__4E88ABD4">
             <End Role="Users" EntitySet="Users" />
             <End Role="AuthorRoleRequests" EntitySet="AuthorRoleRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BookGenre__BookI__35BCFE0A" Association="Self.FK__BookGenre__BookI__35BCFE0A">
+            <End Role="Books" EntitySet="Books" />
+            <End Role="BookGenres" EntitySet="BookGenres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BookGenre__Genre__36B12243" Association="Self.FK__BookGenre__Genre__36B12243">
+            <End Role="Genres" EntitySet="Genres" />
+            <End Role="BookGenres" EntitySet="BookGenres" />
           </AssociationSet>
           <AssociationSet Name="FK__Books__AuthorID__32E0915F" Association="Self.FK__Books__AuthorID__32E0915F">
             <End Role="Users" EntitySet="Users" />
@@ -700,10 +741,6 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="UnfreezeRequests" EntitySet="UnfreezeRequests" />
           </AssociationSet>
-          <AssociationSet Name="BookGenres" Association="Self.BookGenres">
-            <End Role="Books" EntitySet="Books" />
-            <End Role="Genres" EntitySet="Genres" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -719,6 +756,15 @@
                 <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
                 <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
                 <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookGenres">
+            <EntityTypeMapping TypeName="BookPlatformModel.BookGenres">
+              <MappingFragment StoreEntitySet="BookGenres">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -827,14 +873,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="BookGenres" TypeName="BookPlatformModel.BookGenres" StoreEntitySet="BookGenres">
-            <EndProperty Name="Books">
-              <ScalarProperty Name="BookID" ColumnName="BookID" />
-            </EndProperty>
-            <EndProperty Name="Genres">
-              <ScalarProperty Name="GenreID" ColumnName="GenreID" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

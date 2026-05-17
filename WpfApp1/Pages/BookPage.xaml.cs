@@ -20,7 +20,7 @@ namespace WpfApp1.Pages
     /// </summary>
     public partial class BookPage : Page
     {
-        public BookPage()
+        public BookPage(int bookID)
         {
             InitializeComponent();
         }

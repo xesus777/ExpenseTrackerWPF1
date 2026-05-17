@@ -8,7 +8,44 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CatalogPage">
 
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox x:Name="SearchBox" Width="200" Margin="5"/>
+            <ComboBox x:Name="SortBox" Width="120" Margin="5" SelectedIndex="0">
+                <ComboBoxItem Content="По названию"/>
+                <ComboBoxItem Content="По оценке"/>
+            </ComboBox>
+            <ComboBox x:Name="GenreFilter" Width="150" Margin="5" DisplayMemberPath="GenreName"/>
+            <Button Content="Применить" Click="ApplyFilter_Click" Margin="5"/>
+        </StackPanel>
+
+        <ItemsControl x:Name="BooksGrid" Grid.Row="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="5" Width="200">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Book.Title}" FontWeight="Bold" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Book.Users.DisplayName}" FontSize="11" Margin="0,5,0,0"/>
+                            <TextBlock Text="{Binding RatingText}" FontSize="11" Foreground="Gold" Margin="0,5,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button Content="Открыть" Click="OpenBook_Click" Tag="{Binding}" Margin="2" Padding="5"/>
+                                <Button Content="В список" Click="AddToList_Click" Tag="{Binding}" Margin="2" Padding="5"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Page>

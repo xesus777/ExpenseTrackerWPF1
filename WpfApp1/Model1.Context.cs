@@ -26,6 +26,7 @@ namespace WpfApp1
         }
     
         public virtual DbSet<AuthorRoleRequests> AuthorRoleRequests { get; set; }
+        public virtual DbSet<BookGenres> BookGenres { get; set; }
         public virtual DbSet<Books> Books { get; set; }
         public virtual DbSet<Complaints> Complaints { get; set; }
         public virtual DbSet<Genres> Genres { get; set; }
