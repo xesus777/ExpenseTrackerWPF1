@@ -15,12 +15,24 @@ using System.Windows.Shapes;
 
 namespace WpfApp1.Pages
 {
+    public class ReadingListDisplay
+    {
+        public ReadingLists ReadingList { get; set; }
+        public double AverageRating { get; set; }
+        public string RatingText => $"{AverageRating:F1} ★";
+    }
+
     public partial class ReadingListsPage : Page
     {
         public ReadingListsPage()
         {
             InitializeComponent();
-            GenreFilter.ItemsSource = Core.Context.Genres.ToList();
+
+            var genresList = Core.Context.Genres.ToList();
+            genresList.Insert(0, new Genres { GenreID = 0, GenreName = "Все жанры" });
+            GenreFilter.ItemsSource = genresList;
+            GenreFilter.SelectedIndex = 0;
+
             LoadLists();
         }
 
@@ -36,10 +48,10 @@ namespace WpfApp1.Pages
             if (!string.IsNullOrEmpty(search))
                 query = query.Where(rl => rl.Books.Title.Contains(search) || rl.Books.Users.DisplayName.Contains(search)).ToList();
 
-            if (GenreFilter.SelectedItem != null)
+            var selectedGenre = GenreFilter.SelectedItem as Genres;
+            if (selectedGenre != null && selectedGenre.GenreID != 0)
             {
-                var genre = (Genres)GenreFilter.SelectedItem;
-                query = query.Where(rl => rl.Books.BookGenres.Any(bg => bg.GenreID == genre.GenreID)).ToList();
+                query = query.Where(rl => rl.Books.BookGenres.Any(bg => bg.GenreID == selectedGenre.GenreID)).ToList();
             }
 
             if (SortBox.SelectedIndex == 0)
@@ -47,7 +59,13 @@ namespace WpfApp1.Pages
             else
                 query = query.OrderByDescending(rl => rl.Books.Reviews.Average(r => (double?)r.Rating) ?? 0).ToList();
 
-            BooksGrid.ItemsSource = query;
+            var displayList = query.Select(rl => new ReadingListDisplay
+            {
+                ReadingList = rl,
+                AverageRating = rl.Books.Reviews.Count == 0 ? 0 : rl.Books.Reviews.Average(r => r.Rating)
+            }).ToList();
+
+            BooksGrid.ItemsSource = displayList;
         }
 
         private void SectionSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) => LoadLists();
@@ -56,11 +74,14 @@ namespace WpfApp1.Pages
         private void MoveToList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var combo = sender as ComboBox;
-            var readingList = combo.Tag as ReadingLists;
-            var newSection = (combo.SelectedItem as ComboBoxItem)?.Content.ToString();
-            if (newSection != null)
+            var display = combo?.Tag as ReadingListDisplay;
+            if (display == null) return;
+
+            var newSection = (combo?.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (newSection != null && display.ReadingList.Section != newSection)
             {
-                readingList.Section = newSection;
+                display.ReadingList.Section = newSection;
                 Core.Context.SaveChanges();
                 LoadLists();
             }
@@ -68,8 +89,9 @@ namespace WpfApp1.Pages
 
         private void OpenBook_Click(object sender, RoutedEventArgs e)
         {
-            var book = (sender as Button).Tag as Books;
-            NavigationService.Navigate(new BookPage(book.BookID));
+            var display = (sender as Button)?.Tag as ReadingListDisplay;
+            if (display?.ReadingList?.Books != null)
+                NavigationService?.Navigate(new BookPage(display.ReadingList.Books.BookID));
         }
     }
 }

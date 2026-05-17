@@ -9,11 +9,16 @@
       Title="AddEditBookPage">
 
     <StackPanel Margin="10" Width="400">
-        <TextBox x:Name="TitleBox" Margin="5" Tag="Название"/>
+        <TextBlock Text="Название"/>
+        <TextBox x:Name="TitleBox" Margin="5" Tag="Название" />
+        <TextBlock Text="Описание"/>
         <TextBox x:Name="DescriptionBox" Margin="5" Height="60" TextWrapping="Wrap" Tag="Описание"/>
+        <TextBlock Text="Путь к обложке"/>
         <TextBox x:Name="CoverPathBox" Margin="5" Tag="Путь к обложке"/>
-        <TextBox x:Name="ContentBox" Margin="5" Height="150" TextWrapping="Wrap" Tag="Содержимое"/>
-        <ListBox x:Name="GenresList" Margin="5" Height="100" SelectionMode="Multiple" DisplayMemberPath="GenreName"/>
+        <TextBlock Text="Содержимое"/>
+        <TextBox x:Name="ContentBox" Margin="5" Height="100" TextWrapping="Wrap" Tag="Содержимое"/>
+        <TextBlock Text="Жанр"/>
+        <ListBox x:Name="GenresList" Margin="5" Height="Auto" SelectionMode="Multiple" DisplayMemberPath="GenreName"/>
         <Button x:Name="SaveBtn" Content="Сохранить" Click="Save_Click" Margin="5"/>
     </StackPanel>
 </Page>

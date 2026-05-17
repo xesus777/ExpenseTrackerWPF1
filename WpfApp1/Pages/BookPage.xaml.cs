@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp1.Other;
 
 namespace WpfApp1.Pages
 {
@@ -32,11 +33,24 @@ namespace WpfApp1.Pages
         private void LoadBook()
         {
             var book = Core.Context.Books.First(b => b.BookID == _bookId);
+
             TitleText.Text = book.Title;
             AuthorText.Text = $"Автор: {book.Users.DisplayName}";
             GenresText.Text = "Жанры: " + string.Join(", ", book.BookGenres.Select(bg => bg.Genres.GenreName));
             DescriptionText.Text = book.Description;
             ContentText.Text = book.Content;
+
+            if (!string.IsNullOrEmpty(book.CoverImagePath))
+            {
+                try
+                {
+                    CoverImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(book.CoverImagePath));
+                }
+                catch
+                {
+                    CoverImage.Source = null;
+                }
+            }
 
             if (MainWindow.CurrentUserID != 0)
             {
@@ -64,17 +78,25 @@ namespace WpfApp1.Pages
                 return;
             }
 
-            var complaint = new Complaints
+            var book = Core.Context.Books.First(b => b.BookID == _bookId);
+            var complaintWindow = new ComplaintWindow($"Жалоба на книгу: {book.Title}");
+            complaintWindow.Owner = Application.Current.MainWindow;
+            complaintWindow.ShowDialog();
+
+            if (complaintWindow.IsSent && !string.IsNullOrEmpty(complaintWindow.Reason))
             {
-                UserID = MainWindow.CurrentUserID,
-                BookID = _bookId,
-                ReviewID = null,
-                Reason = "Жалоба на книгу",
-                CreatedAt = DateTime.Now
-            };
-            Core.Context.Complaints.Add(complaint);
-            Core.Context.SaveChanges();
-            MessageBox.Show("Жалоба отправлена");
+                var complaint = new Complaints
+                {
+                    UserID = MainWindow.CurrentUserID,
+                    BookID = _bookId,
+                    ReviewID = null,
+                    Reason = complaintWindow.Reason,
+                    CreatedAt = DateTime.Now
+                };
+                Core.Context.Complaints.Add(complaint);
+                Core.Context.SaveChanges();
+                MessageBox.Show("Жалоба на книгу отправлена");
+            }
         }
 
         private void ComplainAuthor_Click(object sender, RoutedEventArgs e)
@@ -86,17 +108,24 @@ namespace WpfApp1.Pages
             }
 
             var book = Core.Context.Books.First(b => b.BookID == _bookId);
-            var complaint = new Complaints
+            var complaintWindow = new ComplaintWindow($"Жалоба на автора: {book.Users.DisplayName}");
+            complaintWindow.Owner = Application.Current.MainWindow;
+            complaintWindow.ShowDialog();
+
+            if (complaintWindow.IsSent && !string.IsNullOrEmpty(complaintWindow.Reason))
             {
-                UserID = MainWindow.CurrentUserID,
-                BookID = _bookId,
-                ReviewID = null,
-                Reason = $"Жалоба на автора {book.Users.DisplayName}",
-                CreatedAt = DateTime.Now
-            };
-            Core.Context.Complaints.Add(complaint);
-            Core.Context.SaveChanges();
-            MessageBox.Show("Жалоба на автора отправлена");
+                var complaint = new Complaints
+                {
+                    UserID = MainWindow.CurrentUserID,
+                    BookID = _bookId,
+                    ReviewID = null,
+                    Reason = complaintWindow.Reason,
+                    CreatedAt = DateTime.Now
+                };
+                Core.Context.Complaints.Add(complaint);
+                Core.Context.SaveChanges();
+                MessageBox.Show("Жалоба на автора отправлена");
+            }
         }
 
         private void FreezeBook_Click(object sender, RoutedEventArgs e)
@@ -117,17 +146,26 @@ namespace WpfApp1.Pages
             }
 
             var review = (sender as Button).Tag as Reviews;
-            var complaint = new Complaints
+            var book = Core.Context.Books.First(b => b.BookID == _bookId);
+
+            var complaintWindow = new ComplaintWindow($"Жалоба на отзыв пользователя {review.Users.DisplayName} к книге {book.Title}");
+            complaintWindow.Owner = Application.Current.MainWindow;
+            complaintWindow.ShowDialog();
+
+            if (complaintWindow.IsSent && !string.IsNullOrEmpty(complaintWindow.Reason))
             {
-                UserID = MainWindow.CurrentUserID,
-                BookID = null,
-                ReviewID = review.ReviewID,
-                Reason = "Жалоба на отзыв",
-                CreatedAt = DateTime.Now
-            };
-            Core.Context.Complaints.Add(complaint);
-            Core.Context.SaveChanges();
-            MessageBox.Show("Жалоба на отзыв отправлена");
+                var complaint = new Complaints
+                {
+                    UserID = MainWindow.CurrentUserID,
+                    BookID = null,
+                    ReviewID = review.ReviewID,
+                    Reason = complaintWindow.Reason,
+                    CreatedAt = DateTime.Now
+                };
+                Core.Context.Complaints.Add(complaint);
+                Core.Context.SaveChanges();
+                MessageBox.Show("Жалоба на отзыв отправлена");
+            }
         }
 
         private void FreezeReview_Click(object sender, RoutedEventArgs e)

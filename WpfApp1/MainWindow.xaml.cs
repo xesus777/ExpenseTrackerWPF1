@@ -68,6 +68,17 @@ namespace WpfApp1
         private void ReadingListsBtn_Click(object sender, RoutedEventArgs e) => MainFrame.Navigate(new ReadingListsPage());
         private void AdminBtn_Click(object sender, RoutedEventArgs e) => MainFrame.Navigate(new AdminPage());
         private void AuthorBtn_Click(object sender, RoutedEventArgs e) => MainFrame.Navigate(new AuthorPage());
-        private void ProfileBtn_Click(object sender, RoutedEventArgs e) => MainFrame.Navigate(new ProfilePage());
+
+        private void ProfileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentUserID == 0)
+            {
+                MainFrame.Navigate(new AuthPage());
+            }
+            else
+            {
+                MainFrame.Navigate(new ProfilePage());
+            }
+        }
     }
 }
