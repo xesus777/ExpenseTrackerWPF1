@@ -6,7 +6,37 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-         
-    </Grid>
+    
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Left" Width="60" Background="#F0F0F0" Margin="0,0,0,0">
+            <Button x:Name="CatalogBtn" ToolTip="Каталог книг" Click="CatalogBtn_Click" Height="50" Margin="5">
+                <StackPanel>
+                    <TextBlock Text="📚" FontSize="24" TextAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="ReadingListsBtn" ToolTip="Списки книг" Click="ReadingListsBtn_Click" Height="50" Margin="5">
+                <StackPanel>
+                    <TextBlock Text="📖" FontSize="24" TextAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="AdminBtn" ToolTip="Администрирование" Click="AdminBtn_Click" Height="50" Margin="5" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="⚙️" FontSize="24" TextAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="AuthorBtn" ToolTip="Страница автора" Click="AuthorBtn_Click" Height="50" Margin="5" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="✍️" FontSize="24" TextAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="ProfileBtn" ToolTip="Профиль" Click="ProfileBtn_Click" Height="50" Margin="5">
+                <StackPanel>
+                    <TextBlock Text="👤" FontSize="24" TextAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <TextBlock x:Name="FrozenWarning" Text="⚠️ Аккаунт заморожен" Foreground="Red" FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center" Visibility="Collapsed" Margin="5"/>
+        </StackPanel>
+
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+    </DockPanel>
 </Window>
