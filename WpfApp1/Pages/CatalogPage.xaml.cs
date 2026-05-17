@@ -94,6 +94,12 @@ namespace WpfApp1.Pages
             var item = (sender as Button).Tag as BookDisplay;
             var book = item.Book;
 
+            if (MainWindow.CurrentUserID == 0)
+            {
+                MessageBox.Show("Необходимо авторизоваться, чтобы добавлять книги в списки");
+                return;
+            }
+
             var selectWindow = new SelectListWindow(book.Title);
             selectWindow.ShowDialog();
 
