@@ -8,7 +8,12 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddEditBookPage">
 
-    <Grid>
-        
-    </Grid>
+    <StackPanel Margin="10" Width="400">
+        <TextBox x:Name="TitleBox" Margin="5" Tag="Название"/>
+        <TextBox x:Name="DescriptionBox" Margin="5" Height="60" TextWrapping="Wrap" Tag="Описание"/>
+        <TextBox x:Name="CoverPathBox" Margin="5" Tag="Путь к обложке"/>
+        <TextBox x:Name="ContentBox" Margin="5" Height="150" TextWrapping="Wrap" Tag="Содержимое"/>
+        <ListBox x:Name="GenresList" Margin="5" Height="100" SelectionMode="Multiple" DisplayMemberPath="GenreName"/>
+        <Button x:Name="SaveBtn" Content="Сохранить" Click="Save_Click" Margin="5"/>
+    </StackPanel>
 </Page>
