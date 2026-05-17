@@ -8,7 +8,73 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BookPage">
 
-    <Grid>
-        
-    </Grid>
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <TextBlock x:Name="TitleText" FontSize="24" FontWeight="Bold"/>
+            <TextBlock x:Name="AuthorText" FontSize="14" Margin="0,5"/>
+            <TextBlock x:Name="GenresText" FontSize="12" Foreground="Gray"/>
+            <TextBlock x:Name="DescriptionText" TextWrapping="Wrap" Margin="0,10"/>
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,10">
+                <TextBlock x:Name="ContentText" TextWrapping="Wrap"/>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10">
+                <Button x:Name="ComplainBookBtn" Content="Пожаловаться на книгу" Click="ComplainBook_Click" Margin="5"/>
+                <Button x:Name="ComplainAuthorBtn" Content="Пожаловаться на автора" Click="ComplainAuthor_Click" Margin="5"/>
+                <Button x:Name="FreezeBookBtn" Content="Заморозить книгу" Click="FreezeBook_Click" Margin="5" Visibility="Collapsed"/>
+            </StackPanel>
+
+            <TextBlock Text="Отзывы" FontSize="18" FontWeight="Bold" Margin="0,10,0,5"/>
+            <ItemsControl x:Name="ReviewsList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Margin="0,5" Padding="5">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">
+                                    <Run Text="{Binding Users.DisplayName}"/> ★ <Run Text="{Binding Rating}"/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding ReviewText}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding CreatedAt}" FontSize="10" Foreground="Gray"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Пожаловаться" Tag="{Binding}" Click="ComplainReview_Click" Width="120" HorizontalAlignment="Left" Margin="0,5"/>
+                                    <Button x:Name="FreezeReviewBtn" 
+                                            Content="Заморозить отзыв" 
+                                            Tag="{Binding}" 
+                                            Click="FreezeReview_Click" 
+                                            Width="120" 
+                                            HorizontalAlignment="Left" 
+                                            Margin="5,5,0,5" 
+                                            Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,10">
+                <StackPanel>
+                    <TextBlock Text="Оставить отзыв" FontWeight="Bold"/>
+                    <ComboBox x:Name="RatingBox" Margin="0,5" SelectedIndex="0">
+                        <ComboBoxItem Content="1"/>
+                        <ComboBoxItem Content="2"/>
+                        <ComboBoxItem Content="3"/>
+                        <ComboBoxItem Content="4"/>
+                        <ComboBoxItem Content="5"/>
+                        <ComboBoxItem Content="6"/>
+                        <ComboBoxItem Content="7"/>
+                        <ComboBoxItem Content="8"/>
+                        <ComboBoxItem Content="9"/>
+                        <ComboBoxItem Content="10"/>
+                    </ComboBox>
+                    <TextBox x:Name="ReviewText" Height="60" TextWrapping="Wrap" Margin="0,5"/>
+                    <Button Content="Отправить отзыв" Click="SubmitReview_Click" Margin="0,5"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </Page>
