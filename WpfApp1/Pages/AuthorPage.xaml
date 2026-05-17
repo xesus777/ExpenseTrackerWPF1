@@ -8,7 +8,43 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AuthorPage">
 
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Добавить новую книгу" Click="AddBook_Click" Width="150" Margin="0,0,0,10" HorizontalAlignment="Left"/>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Опубликованные книги">
+                <ItemsControl x:Name="PublishedBooks">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="5">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                                    <Button Content="Редактировать" Click="EditBook_Click" Tag="{Binding}" Margin="0,5"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </TabItem>
+            <TabItem Header="Замороженные книги">
+                <ItemsControl x:Name="FrozenBooks">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Red" BorderThickness="1" Margin="5" Padding="5">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="Red"/>
+                                    <Button Content="Оспорить заморозку" Click="AppealFrozenBook_Click" Tag="{Binding}" Margin="0,5"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>
