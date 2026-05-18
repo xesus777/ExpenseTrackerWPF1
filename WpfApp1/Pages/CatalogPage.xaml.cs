@@ -41,7 +41,7 @@ namespace WpfApp1.Pages
         {
             var query = Core.Context.Books.Where(b => b.IsFrozen == false).ToList();
 
-            string search = SearchBox.Text;
+            string search = SearchBox.Text.ToLower();
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(b =>

@@ -51,7 +51,34 @@ namespace WpfApp1.Pages
             var complaint = (sender as Button).Tag as Complaints;
             if (complaint == null) return;
 
-            if (complaint.BookID != null)
+            if (complaint.Reason != null && complaint.Reason.StartsWith("ЖАЛОБА_НА_АВТОРА:"))
+            {
+                var book = Core.Context.Books.FirstOrDefault(b => b.BookID == complaint.BookID);
+                if (book != null)
+                {
+                    var author = Core.Context.Users.FirstOrDefault(u => u.UserID == book.AuthorID);
+                    if (author != null)
+                    {
+                        author.IsFrozen = true;
+                        Core.Context.SaveChanges();
+                        MessageBox.Show($"Пользователь {author.DisplayName} (автор) ЗАМОРОЖЕН");
+
+                        var authorBooks = Core.Context.Books.Where(b => b.AuthorID == author.UserID).ToList();
+                        foreach (var b in authorBooks)
+                        {
+                            b.IsFrozen = true;
+                        }
+                        Core.Context.SaveChanges();
+                        MessageBox.Show($"Все книги автора также заморожены");
+                    }
+                }
+                Core.Context.Complaints.Remove(complaint);
+                Core.Context.SaveChanges();
+                LoadData();
+                return;
+            }
+
+            if (complaint.BookID != null && complaint.ReviewID == null)
             {
                 var book = Core.Context.Books.FirstOrDefault(b => b.BookID == complaint.BookID);
                 if (book != null)
@@ -75,7 +102,6 @@ namespace WpfApp1.Pages
             Core.Context.SaveChanges();
             LoadData();
         }
-
         private void RejectComplaint_Click(object sender, RoutedEventArgs e)
         {
             var complaint = (sender as Button).Tag as Complaints;

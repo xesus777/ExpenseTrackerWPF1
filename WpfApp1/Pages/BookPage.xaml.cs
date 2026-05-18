@@ -108,6 +108,7 @@ namespace WpfApp1.Pages
             }
 
             var book = Core.Context.Books.First(b => b.BookID == _bookId);
+
             var complaintWindow = new ComplaintWindow($"Жалоба на автора: {book.Users.DisplayName}");
             complaintWindow.Owner = Application.Current.MainWindow;
             complaintWindow.ShowDialog();
@@ -117,9 +118,9 @@ namespace WpfApp1.Pages
                 var complaint = new Complaints
                 {
                     UserID = MainWindow.CurrentUserID,
-                    BookID = _bookId,
+                    BookID = _bookId,  
                     ReviewID = null,
-                    Reason = complaintWindow.Reason,
+                    Reason = $"ЖАЛОБА_НА_АВТОРА: {complaintWindow.Reason}",
                     CreatedAt = DateTime.Now
                 };
                 Core.Context.Complaints.Add(complaint);

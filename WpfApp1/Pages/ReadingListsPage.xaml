@@ -31,52 +31,56 @@
             <ComboBox x:Name="GenreFilter" Width="150" Margin="5" DisplayMemberPath="GenreName"/>
             <Button Content="Применить" Click="ApplyFilter_Click" Margin="5"/>
         </StackPanel>
+        <ScrollViewer Grid.Row="2"  HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl x:Name="BooksGrid" Grid.Row="2">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="5" Width="200">
+                            <StackPanel>
+                                <Image Source="{Binding ReadingList.Books.CoverImagePath}" 
+                           Width="150" 
+                           Height="200" 
+                           Stretch="UniformToFill"
+                           Margin="0,0,0,5">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Setter Property="Source" Value="/Images/no_cover.png"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ReadingList.Books.CoverImagePath}" Value="{x:Null}">
+                                                    <Setter Property="Source" Value="/Images/no_cover.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ReadingList.Books.CoverImagePath}" Value="">
+                                                    <Setter Property="Source" Value="/Images/no_cover.png"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
 
-        <ItemsControl x:Name="BooksGrid" Grid.Row="2">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="5" Width="200">
-                        <StackPanel>
-                            <Image Source="{Binding ReadingList.Books.CoverImagePath}" 
-                                   Width="150" 
-                                   Height="200" 
-                                   Stretch="UniformToFill"
-                                   Margin="0,0,0,5">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Source" Value="/Images/no_cover.png"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ReadingList.Books.CoverImagePath}" Value="{x:Null}">
-                                                <Setter Property="Source" Value="/Images/no_cover.png"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding ReadingList.Books.CoverImagePath}" Value="">
-                                                <Setter Property="Source" Value="/Images/no_cover.png"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
+                                <TextBlock Text="{Binding ReadingList.Books.Title}" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding ReadingList.Books.Users.DisplayName}" FontSize="11" Margin="0,5,0,0"/>
+                                <TextBlock Text="{Binding RatingText}" FontSize="11" Foreground="Gold" Margin="0,5,0,0"/>
 
-                            <TextBlock Text="{Binding ReadingList.Books.Title}" FontWeight="Bold" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding ReadingList.Books.Users.DisplayName}" FontSize="11" Margin="0,5,0,0"/>
-                            <TextBlock Text="{Binding RatingText}" FontSize="11" Foreground="Gold" Margin="0,5,0,0"/>
+                                <ComboBox x:Name="MoveToList" Width="120" Margin="0,5" SelectionChanged="MoveToList_SelectionChanged" Tag="{Binding}">
+                                    <ComboBoxItem Content="В планах"/>
+                                    <ComboBoxItem Content="Читаю"/>
+                                    <ComboBoxItem Content="Прочитано"/>
+                                    <ComboBoxItem Content="Заброшено"/>
+                                </ComboBox>
+                                <Button Content="Открыть" Click="OpenBook_Click" Tag="{Binding}" Margin="0,5"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                            <ComboBox x:Name="MoveToList" Width="120" Margin="0,5" SelectionChanged="MoveToList_SelectionChanged" Tag="{Binding}">
-                                <ComboBoxItem Content="В планах"/>
-                                <ComboBoxItem Content="Читаю"/>
-                                <ComboBoxItem Content="Прочитано"/>
-                                <ComboBoxItem Content="Заброшено"/>
-                            </ComboBox>
-                            <Button Content="Открыть" Click="OpenBook_Click" Tag="{Binding}" Margin="0,5"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ScrollViewer>
+
+            
     </Grid>
 </Page>
