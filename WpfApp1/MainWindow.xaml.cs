@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.Pages;
+using System.Diagnostics;
 
 namespace WpfApp1
 {
@@ -78,6 +80,17 @@ namespace WpfApp1
             else
             {
                 MainFrame.Navigate(new ProfilePage());
+            }
+        }
+        private void HelpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start("help.chm");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось открыть справку: {ex.Message}");
             }
         }
     }

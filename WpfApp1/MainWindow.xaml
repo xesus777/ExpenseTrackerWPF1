@@ -34,6 +34,11 @@
                     <TextBlock Text="👤" FontSize="24" TextAlignment="Center"/>
                 </StackPanel>
             </Button>
+            <Button x:Name="HelpBtn" ToolTip="Справка" Click="HelpBtn_Click" Height="50" Margin="5">
+                <StackPanel>
+                    <TextBlock Text="❓" FontSize="24" TextAlignment="Center"/>
+                </StackPanel>
+            </Button>
             <TextBlock x:Name="FrozenWarning" Text="⚠️ Аккаунт заморожен" Foreground="Red" FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center" Visibility="Collapsed" Margin="5"/>
         </StackPanel>
 
